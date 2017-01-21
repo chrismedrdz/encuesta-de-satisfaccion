@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+
+<title>jQuery timepicker example</title>
+
+<meta charset="UTF-8" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/smoothness/jquery-ui.css" type="text/css" media="screen" />
+<!--<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/themes/base/jquery-ui.css" type="text/css" media="all" />-->
+<link rel="stylesheet" href="timepicker/jquery-ui-timepicker.css" type="text/css" media="screen" />
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="timepicker/jquery.ui.timepicker.js"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function() {
+	jQuery('.timepicker').timepicker({
+		//hourText: 'години',
+		//minuteText: 'хвилини',
+		//amPmText: ['', '']
+	});
+});
+//]]>
+</script>
+<style type="text/css">
+*{margin:0; padding:0;}
+body {font-family: arial,verdana,tahoma,helvetica,sans-serif; font-size:12px; line-height:15px; padding:20px;}
+fieldset {border: 0;}
+</style>
+	
+</head>
+
+<body>
+	
+	<div>
+		<form method="post" action="">
+			<fieldset>
+				<label>Time: <input type="text" class="text timepicker" value="" /></label>
+				<input type="submit" class="submit" value="Submit" />
+			</fieldset>
+		</form>
+	</div>
+
+</body>
+</html>

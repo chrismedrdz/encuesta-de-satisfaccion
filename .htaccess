@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+# Activar RewriteEngine
+RewriteEngine on
+RewriteBase /sistemas/encuestas/encuesta-institucional
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+ 
+# Reescribir la URL solicitada por el usuario
+#   Entrada:  ID-NOMBRE
+#   Salida: index.php?id=ID
+#RewriteRule ^([0-9]+)\-([a-zA-Z0-9-]*)$ index.php?page=$1
+RewriteRule ^([a-zA-Z0-9-]*)$ index.php?p=$1
+RewriteRule ^([a-zA-Z0-9-]*)/([a-zA-Z0-9-]*)/?$ index.php?p=$1&s=$2
+RewriteRule ^([a-zA-Z0-9-]*)/([a-zA-Z0-9-]*)/([a-zA-Z0-9-]*)/?$ index.php?p=$1&s=$2&t=$3
+</IfModule>
