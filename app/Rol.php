@@ -15,9 +15,4 @@ class Rol extends Model
     	return $this->belongsTo('App\User');
     }
     
-
-    /*public function user() {
-    	return $this->hasOne('App\User');
-    }
-    */
 }

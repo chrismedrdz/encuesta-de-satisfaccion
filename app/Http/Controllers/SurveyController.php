@@ -11,19 +11,11 @@ class SurveyController extends Controller
 {
     public function index()
 	{
-		$survey=\Auth::user()->survey_id;
-
-		switch ($survey) {
-            case '1':
-            	$survey=Survey::find($survey);
-                $sections = $survey->sections_ids;
-				return view('layouts.survey')->with("sections_str",  $sections);
-                break;
-            default:
-                return 'algo salio mal';
-                break;
-        
-		}
+		$survey_id=\Auth::user()->survey_id;
+		$survey=Survey::find($survey_id);
+        $sections_str = $survey->sections_ids;
+        $sections = explode(',', $sections_str);
+        return view('layouts.survey')->with("sections",  $sections);
 		
 
 	}

@@ -10,10 +10,12 @@ class Survey extends Model
         'id', 'name', 'sections_ids',
     ];
 
+    /*
     public function section()
     {
         return $this->hasOne('App\Section', 'id', 'sections_ids');
     }
+    */
 
     public function user() {
     	return $this->belongsTo('App\User');

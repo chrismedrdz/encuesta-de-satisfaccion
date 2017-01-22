@@ -2,38 +2,19 @@
 setlocale(LC_ALL, "es_ES.UTF-8"); 
 date_default_timezone_set('America/Monterrey');
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
-
-if (headers_sent()) {
-    // las cabeceras ya se han enviado, no intentar añadir una nueva
-}
-else {
-    // es posible añadir nuevas cabeceras HTTP
-    header("Content-Type: text/html; charset=UTF-8\r\n");
-}
-
-
-$host=$_SERVER['HTTP_HOST'];
-$url1 = explode('/', $_SERVER['REQUEST_URI'])[1];
-
-$url2 = explode('/', $_SERVER['REQUEST_URI'])[2];
-$url3 = explode('/', $_SERVER['REQUEST_URI'])[3];
-$url4 = explode('/', $_SERVER['REQUEST_URI'])[4];
-$url5 = explode('/', $_SERVER['REQUEST_URI'])[5];
-
-define('ROOT_PATH1', 'http://'.$host.'/'.$url1.'/'); 
-define('ROOT_PATH2', 'http://'.$host.'/'.$url1.'/'.$url2.'/'.$url3.'/'.$url4.'/'.$url5.'/'); 
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<meta name="author" content="Christopher Medina" />
+	<meta name="author" content="Christopher Medina | Alvaro Esparza" />
 
 	<!-- Stylesheets
 	============================================= -->
 	<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="/template/css/bootstrap.css" type="text/css" />
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
 	<link rel="stylesheet" href="/template/css/style.css" type="text/css" />
 	<link rel="stylesheet" href="/template/css/dark.css" type="text/css" />
 	<link rel="stylesheet" href="/template/css/font-icons.css" type="text/css" />	

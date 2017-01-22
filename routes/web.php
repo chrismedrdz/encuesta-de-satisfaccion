@@ -47,13 +47,16 @@ Route::group(['prefix'=>'mayor', 'middleware' => ['auth', 'mayor'] ], function (
   Route::get('section_1/section_2a/section_2b/section_2c/section_2d/section_2e', 'MayorController@section_2e');
   Route::get('section_1/section_2a/section_2b/section_2c/section_2d/section_2e/section_2f', 'MayorController@section_2f');
 
+
+  Route::get('survey/{id}',[
+    'uses'  =>  'SurveyController@index',
+    'as'  =>  'surveyView'
+  ]);
+
+
 });
 
 
-Route::get('/survey/{id}',[
-  'uses'  =>  'SurveyController@index',
-  'as'  =>  'surveyView'
-]);
 
 
 //SECUNDARIA
