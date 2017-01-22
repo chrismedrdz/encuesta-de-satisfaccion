@@ -34,6 +34,9 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 	<script type="text/javascript" src="/template/js/jquery.js"></script>
 	<script type="text/javascript" src="/template/js/plugins.js"></script>
 
+	<!-- Vuejs script file -->
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
 	<style type="text/css">
 	.logocecac{float: right;height: 100px;padding: 20px;}
 	#logo img { padding: 10px;}

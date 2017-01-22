@@ -1,5 +1,8 @@
 <style type="text/css">
 .title-block { border-left: 7px solid #C02942;}
+.rating-container{display: inline-block;}
+.control-label {display: block;}
+.rating-disabled .rating { opacity: 0.5; }
 </style>
 <div class="tab-container">
 @php
@@ -63,35 +66,19 @@
                 </script>
               @elseif( $question['question_type'] === 3)
                 {{--10 estrellas --}}
-                {!! Form::number('input-'.$question['id'], '0',['id' => 'input-'.$question['id']]) !!}
+
+                {!! Form::text('input-'.$question['id'], '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
+
+                <label style="display: inline; font-weight:bold; color: #C02942;">
+                  <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
+                </label>
 
                 <script>
                   $("#input-{{$question['id']}}").rating({
-                    min:1, max:10, step:1, size:'xs',showClear:false, clearCaption:'',
-                    starCaptions: {
-                        '1': 'Muy Insatisfecho',
-                        '2': 'Insatisfecho',
-                        '3': 'Ni insatisfecho ni satisfecho',
-                        '4': 'Satisfecho',
-                        '5':   'Muy Satisfecho',
-                        '6': 'Muy Insatisfecho',
-                        '7': 'Insatisfecho',
-                        '8': 'Ni insatisfecho ni satisfecho',
-                        '9': 'Satisfecho',
-                        '10':   'Muy Satisfecho'
-                    },
-                    starCaptionClasses: {
-                        '1': 'label label-danger',
-                        '2': 'label label-warning',
-                        '3': 'label label-info',
-                        '4': 'label label-primary',
-                        '5': 'label label-success',
-                        '6': 'label label-danger',
-                        '7': 'label label-warning',
-                        '8': 'label label-info',
-                        '9': 'label label-primary',
-                        '10': 'label label-success'
-                    }
+                    min:0, max:10, stars:10, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:false
+                  }).on("rating.change", function(event, value, caption) {
+                    //alert(value);
+                    //$('#input-39').val(value);
                   });
                 </script>
 
@@ -132,6 +119,8 @@
           <ul class="pager center">
 
               <a onclick="siguiente({{$s}});" class="button button-rounded button-reveal button-large button-green tright"><i class="icon-line-arrow-right"></i><span>Siguiente</span></a>
+
+              <button type="submit">Submit</button>
               
           </ul>
 

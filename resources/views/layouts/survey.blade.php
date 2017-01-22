@@ -24,13 +24,17 @@
   .skills li .progress-percent {z-index: 1000;}
   </style>
 
+
   <div class="content-wrap" style="padding:0px;">
 
-    <div class="container clearfix" >
+
+    <div class="container clearfix" id="app-survey">
+
+    <!-- <template> -->
 
         <ul class="skills">
             <li data-percent="{{$percent_completed}}">
-              <span>Progreso</span>
+              <span>Progreso </span>
               <div class="progress">
                 <div class="progress-percent"><div class="counter counter-inherit counter-instant"><span data-from="0" data-to="{{$percent_completed}}" data-refresh-interval="30" data-speed="1100"></span>%</div></div>
               </div>
@@ -57,18 +61,35 @@
 
           </ul>
 
+          <!--
+          <h1 v-bind:title="message"> @{{ message }} </h1> 
+          <input type="text" v-model="message">
+          -->
+
           @include('layouts.sections')
 
 
         </div> <!-- #tabs end -->
 
+        <!-- </template> -->
+
     </div> <!-- #container end -->
+
+
 
   </div> <!-- #content-wrap end -->
 
 </section><!-- #content end -->
 
 <script type="text/javascript">
+/*
+  var appSurvey = new Vue({
+    el: '#app-survey',
+    data: {
+      message: 'Hello Vue!'
+    }
+  })
+*/
   
   function regresar (section) {
     var ant = section-2;
@@ -78,6 +99,19 @@
   function siguiente (section) {
     var sig = section;
     $( "#tabs" ).tabs( "option", "active", sig );
+  }
+
+  function setNA(obj,question_id) {
+    $(obj).val(obj.checked ? 1 : 0);
+
+    if ($(obj).val() == '1') {
+      $('#input-'+question_id).rating('clear');
+      $('#input-'+question_id).rating('refresh', {disabled: true});
+      $('#input-'+question_id).val('1111');
+    } else {
+      $('#input-'+question_id).rating('refresh', {disabled: false});
+      $('#input-'+question_id).val('0');
+    }
   }
 
 </script>

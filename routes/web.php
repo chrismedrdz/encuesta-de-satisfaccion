@@ -56,7 +56,7 @@ Route::group(['prefix'=>'mayor', 'middleware' => ['auth', 'mayor'] ], function (
 
 });
 
-
+Route::post('answers', 'AnswersController@post');
 
 
 //SECUNDARIA
