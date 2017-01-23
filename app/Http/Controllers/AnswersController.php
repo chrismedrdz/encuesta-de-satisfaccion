@@ -8,7 +8,7 @@ class AnswersController extends Controller
 {
     //
 
-    public function post(Request $request) {
+    public function postAnswers(Request $request) {
     	dd($request);
     }
 }

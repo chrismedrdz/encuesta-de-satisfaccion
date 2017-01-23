@@ -8,7 +8,7 @@ class QuestionType extends Model
 {
 	protected $table = 'questions_type';
     protected $fillable = [
-        'id', 'name','high_rank','na_active',
+        'id', 'name','high_rank','na_active','typehead_type',
     ];
 
     public function question() {

@@ -34,6 +34,9 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 	<script type="text/javascript" src="/template/js/jquery.js"></script>
 	<script type="text/javascript" src="/template/js/plugins.js"></script>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+
+
 	<!-- Vuejs script file -->
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
 

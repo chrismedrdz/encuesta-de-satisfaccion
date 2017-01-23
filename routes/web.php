@@ -53,10 +53,16 @@ Route::group(['prefix'=>'mayor', 'middleware' => ['auth', 'mayor'] ], function (
     'as'  =>  'surveyView'
   ]);
 
+  Route::post('survey/{id}/postanswers',[
+    'uses'  =>  'AnswersController@postAnswers',
+    'as'  =>  'answerPost'
+  ]);
+
 
 });
 
-Route::post('answers', 'AnswersController@post');
+Route::get('autocomplete-basic',array('as'=>'autocomplete-basic','uses'=>'AutoCompleteController@autocomplete_basic'));
+Route::get('autocomplete-maestros',array('as'=>'autocomplete_maestros','uses'=>'AutoCompleteController@autocomplete_maestros'));
 
 
 //SECUNDARIA
