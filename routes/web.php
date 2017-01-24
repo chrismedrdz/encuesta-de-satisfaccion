@@ -39,15 +39,9 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth', 'admin'] ], function (
 Route::group(['prefix'=>'mayor', 'middleware' => ['auth', 'mayor'] ], function () {
   Route::get('/', 'HomeController@mayor');
 
-  Route::get('section_1', 'MayorController@section_1');
-  Route::get('section_1/section_2a', 'MayorController@section_2a');
-  Route::get('section_1/section_2a/section_2b', 'MayorController@section_2b');
-  Route::get('section_1/section_2a/section_2b/section_2c', 'MayorController@section_2c');
-  Route::get('section_1/section_2a/section_2b/section_2c/section_2d', 'MayorController@section_2d');
-  Route::get('section_1/section_2a/section_2b/section_2c/section_2d/section_2e', 'MayorController@section_2e');
-  Route::get('section_1/section_2a/section_2b/section_2c/section_2d/section_2e/section_2f', 'MayorController@section_2f');
 
-
+  Route::get('survey/{id}', 'SurveyController@index');
+  
   Route::get('survey/{id}',[
     'uses'  =>  'SurveyController@index',
     'as'  =>  'surveyView'
@@ -57,7 +51,6 @@ Route::group(['prefix'=>'mayor', 'middleware' => ['auth', 'mayor'] ], function (
     'uses'  =>  'AnswersController@postAnswers',
     'as'  =>  'answerPost'
   ]);
-
 
 });
 

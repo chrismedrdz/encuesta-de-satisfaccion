@@ -5,7 +5,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="author" content="Christopher Medina | Alvaro Esparza" />
@@ -86,14 +86,14 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 
 					<!-- Logo
 					============================================= -->
-					<div id="logo" align="center">
-						<a href="/template/" class="standard-logo" data-dark-logo="img/logo2.png"><img src="{{ url('/img/logo2.png') }}"></a>
+					<div id="logo" class="center">
+						<a href="/template/" class="standard-logo" data-dark-logo="img/logo2.png"><img alt="logo" src="{{ url('/img/logo2.png') }}"></a>
 
-						<a href="/template/" class="retina-logo" data-dark-logo="img/logo2.png"><img src="{{ url('/img/logo2.png') }}"></a>
+						<a href="/template/" class="retina-logo" data-dark-logo="img/logo2.png"><img alt="logo" src="{{ url('/img/logo2.png') }}"></a>
 					</div>
 
-					<div class="logocecac" align="center">
-			            <img align="center" width="41" height="33" src="{{ url('/images/logo_cecac.png') }}">
+					<div class="logocecac center" >
+			            <img class="center" alt="logocecac" width="41" height="33" src="{{ url('/images/logo_cecac.png') }}">
 			            <div class="welcome_heading"><h6>Centro Escolar Cuauht&eacute;moc A.C.</h6></div>
 			        </div>
 

@@ -60,7 +60,6 @@ class AuthController extends Controller
 
     public function postAccess(Request $request) {
    
-     
         $this->validate($request, [
             'code' => 'required',
         ]);
@@ -74,12 +73,7 @@ class AuthController extends Controller
             return redirect("/");
         }
     
-
     }
-
-
-
-
 
 
 //login2

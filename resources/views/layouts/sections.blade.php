@@ -1,4 +1,4 @@
-<style type="text/css">
+<style>
 .title-block { border-left: 7px solid #C02942;}
 .rating-container{display: inline-block;}
 .control-label {display: block;}
@@ -21,7 +21,7 @@
 
     </script>
 
-    <div class="tab-content clearfix ui-tabs-panel ui-widget-content ui-corner-bottom" id="tab-s{{$s}}" aria-labelledby="ui-id-29" role="tabpanel" aria-expanded="true" aria-hidden="false" style="display: block;">
+    <div class="tab-content clearfix ui-tabs-panel ui-widget-content ui-corner-bottom" id="tab-s{{$s}}" role="tabpanel" aria-expanded="true" aria-hidden="false" style="display: block;">
 
           <div id="errormsg_s{{$s}}" class="style-msg errormsg hidden">
             <div class="sb-msg"><i class="icon-remove"></i><strong>Ups!</strong> Debes completar todos los reactivos para continuar.</div>
@@ -33,10 +33,12 @@
             </div>
           @endif
 
-          
-
           {!! Form::open(['id' => 'form_section'.$s, 'name' => 'form_section'.$s, 'onsubmit' => 'return false', 'method' => 'POST',  'url' => url()->current().'/postanswers'
           ] ) !!}
+
+          {!! Form::hidden('section_id', $sec ) !!}
+          {!! Form::hidden('survey_id', $survey_id ) !!}
+          {!! Form::hidden('user_id', $usuario->id ) !!}
 
           @php
             $questions = explode(',', $section->questions_ids);
@@ -48,7 +50,7 @@
             $question=\App\Question::find($question_id);
             @endphp
 
-            {!! Form::label('', $i.' - '. $question['description'], ['class' => 'control-label']) !!}
+            {!! Form::label('input-'.$question['id'], $i.' - '. $question['description'], ['class' => 'control-label']) !!}
               
               @if( $question['question_type'] === 1)
                 {{--3 estrellas --}}
@@ -57,7 +59,7 @@
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"/> No Aplica 
                   </label>
                 @endif
 
@@ -65,7 +67,7 @@
                 <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script>
+                <script type="text/javascript">
                   $("#input-{{$question['id']}}").rating({
                     min:0, max:{{$question->type->high_rank}}, stars:{{$question->type->high_rank}}, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:true,
                       starCaptions: {
@@ -94,7 +96,7 @@
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"/> No Aplica 
                   </label>
                 @endif
 
@@ -102,7 +104,7 @@
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script>
+                <script type="text/javascript">
                   $("#input-{{$question['id']}}").rating({
                     min:0, max:{{$question->type->high_rank}}, stars:{{$question->type->high_rank}}, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:true,
                       starCaptions: {
@@ -135,7 +137,7 @@
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"/> No Aplica 
                   </label>
                 @endif
 
@@ -143,7 +145,7 @@
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script>
+                <script type="text/javascript">
                   $("#input-{{$question['id']}}").rating({
                     min:0, max:10, stars:10, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:false
                   }).on("rating.change", function(event, value, caption) {
@@ -171,7 +173,7 @@
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script>
+                <script type="text/javascript">
                   globalSection{{$s}}.push({
                       type : 'select',
                       question : {{$question['id']}}
@@ -187,7 +189,7 @@
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script>
+                <script type="text/javascript">
                   globalSection{{$s}}.push({
                       type : 'text',
                       question : {{$question['id']}}
@@ -203,7 +205,7 @@
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script>
+                <script type="text/javascript">
                   globalSection{{$s}}.push({
                       type : 'textarea',
                       question : {{$question['id']}}
@@ -220,7 +222,7 @@
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script>
+                <script type="text/javascript">
 
                   var path = "{{ route('autocomplete-basic') }}";
                   $('#input-'{{$question['id']}}).typeahead({
@@ -254,7 +256,7 @@
 
                 </BR>
 
-                <script>
+                <script type="text/javascript">
 
                     var path = "{{ route('autocomplete-maestros') }}";
                     $('#input-{{$question['id']}}').typeahead({
@@ -310,14 +312,14 @@
           @if ($section->comments_required == 1)
             <label class="text-red">¿Algún comentario?</label>
             <textarea id="comments_s{{$s}}" placeholder="Escribe algún conmentario..." class="form-control" rows="5"></textarea>
-            <br>
+            <br/>
           @endif
 
-          <ul class="pager center">
+          <div class="pager center">
 
               <button type="submit" onclick="validateForm({{$s}});" class="button button-rounded button-reveal button-large button-green tright"><i class="icon-line-arrow-right"></i><span>Siguiente</span></button>
               
-          </ul>
+          </div>
 
       {!! Form::close() !!}
 
@@ -428,8 +430,11 @@
           $('#errormsg_s'+section).addClass('hidden');
 
 
-          $('#form_section'+section).removeAttr('onsubmit');
-          $('#form_section'+section).submit();
+
+
+
+                $('#form_section'+section).removeAttr('onsubmit');
+                $('#form_section'+section).submit();
         }
         
       }

@@ -15,8 +15,12 @@ class SurveyController extends Controller
 		$survey=Survey::find($survey_id);
         $sections_str = $survey->sections_ids;
         $sections = explode(',', $sections_str);
-        return view('layouts.survey')->with("sections",  $sections)->with("usuario", \Auth::user());
-		
-
+        return view('layouts.survey',
+        	[ 
+        		"survey_id" => $survey_id,
+        		"sections" => $sections,
+        		"usuario" => \Auth::user()
+        	]
+        );
 	}
 }
