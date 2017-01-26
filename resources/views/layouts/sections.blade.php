@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 .title-block { border-left: 7px solid #C02942;}
 .rating-container{display: inline-block;}
 .control-label {display: block;}
@@ -8,11 +8,13 @@
 <div class="tab-container">
 @php
   $s=1;
+  $aux=0;
 @endphp
 
 @foreach ($sections as $sec)
     @php
     $section=\App\Section::find($sec);
+
     @endphp
 
     <script type="text/javascript">
@@ -21,8 +23,11 @@
 
     </script>
 
-    <div class="tab-content clearfix ui-tabs-panel ui-widget-content ui-corner-bottom" id="tab-s{{$s}}" role="tabpanel" aria-expanded="true" aria-hidden="false" style="display: block;">
-
+    @if ($section_active == $aux)
+      <div class="tab-content clearfix ui-tabs-panel ui-widget-content ui-corner-bottom active" id="tab-s{{$s}}" >
+    @else
+      <div class="tab-content clearfix ui-tabs-panel ui-widget-content ui-corner-bottom" id="tab-s{{$s}}" >
+    @endif
           <div id="errormsg_s{{$s}}" class="style-msg errormsg hidden">
             <div class="sb-msg"><i class="icon-remove"></i><strong>Ups!</strong> Debes completar todos los reactivos para continuar.</div>
           </div>
@@ -33,33 +38,41 @@
             </div>
           @endif
 
+          
+
           {!! Form::open(['id' => 'form_section'.$s, 'name' => 'form_section'.$s, 'onsubmit' => 'return false', 'method' => 'POST',  'url' => url()->current().'/postanswers'
           ] ) !!}
 
           {!! Form::hidden('section_id', $sec ) !!}
           {!! Form::hidden('survey_id', $survey_id ) !!}
           {!! Form::hidden('user_id', $usuario->id ) !!}
-
+    
           @php
             $questions = explode(',', $section->questions_ids);
           @endphp
           
           @php$i=1;@endphp
           @foreach ($questions as $question_id)
+
             @php
             $question=\App\Question::find($question_id);
             @endphp
 
-            {!! Form::label('input-'.$question['id'], $i.' - '. $question['description'], ['class' => 'control-label']) !!}
+            {!! Form::label('', $i.' - '. $question['description'], ['class' => 'control-label']) !!}
               
               @if( $question['question_type'] === 1)
                 {{--3 estrellas --}}
-
-                {!! Form::text('input-'.$question['id'], '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
+                 @php
+                  $key=$question->id;{{--Le asigno a la variable $key el id de la pregunta--}}
+                  $key= (string)$key;
+                 
+                @endphp
+                {{--Hago un array y fuerzo a que el indice del array sea el id de la pregunta y que el valor sea lo que el usuario desee según las estrellas de rating js--}}
+                {!! Form::text('question['.$key. ']]', '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"/> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
                   </label>
                 @endif
 
@@ -67,13 +80,14 @@
                 <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script type="text/javascript">
+                <script>
                   $("#input-{{$question['id']}}").rating({
                     min:0, max:{{$question->type->high_rank}}, stars:{{$question->type->high_rank}}, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:true,
                       starCaptions: {
                           '1': 'Insatisfecho',
                           '2': 'Ni Insatisfecho ni Satisfecho',
-                          '3': 'Satisfecho'
+                          '3': 'Satisfecho',
+                          '1111':   'No Aplica'
                       },
                       starCaptionClasses: {
                           '1': 'label label-danger',
@@ -91,12 +105,17 @@
 
               @elseif( $question['question_type'] === 2)
                 {{--5 estrellas --}}
+                 @php
+                  $key=$question['id'];
+                  $key= (string)$key;
+                 
+                @endphp
 
-                {!! Form::text('input-'.$question['id'], '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
+                {!! Form::text('question['.$key. ']]', '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"/> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
                   </label>
                 @endif
 
@@ -104,7 +123,7 @@
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script type="text/javascript">
+                <script>
                   $("#input-{{$question['id']}}").rating({
                     min:0, max:{{$question->type->high_rank}}, stars:{{$question->type->high_rank}}, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:true,
                       starCaptions: {
@@ -112,7 +131,8 @@
                           '2': 'Insatisfecho',
                           '3': 'Ni insatisfecho ni satisfecho',
                           '4': 'Satisfecho',
-                          '5':   'Muy Satisfecho'
+                          '5':   'Muy Satisfecho',
+                          '1111':   'No Aplica'
                       },
                       starCaptionClasses: {
                           '1': 'label label-danger',
@@ -132,12 +152,17 @@
 
               @elseif( $question['question_type'] === 3)
                 {{--10 estrellas --}}
+                @php
+                  $key=$question['id'];
+                  $key= (string)$key;
+                 
+                @endphp
 
-                {!! Form::text('input-'.$question['id'], '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
+                {!! Form::text('question['.$key. ']]', '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"/> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
                   </label>
                 @endif
 
@@ -145,7 +170,7 @@
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script type="text/javascript">
+                <script>
                   $("#input-{{$question['id']}}").rating({
                     min:0, max:10, stars:10, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:false
                   }).on("rating.change", function(event, value, caption) {
@@ -165,15 +190,18 @@
                 @php
                   $questions_str = ','.$question->options;
                   $options_question = explode(',', $questions_str);
-                @endphp
+                  $key=$question->id;
+                  $keys= array($key);                  
 
-                {!! Form::select('input-'.$question['id'], $options_question, null, ['id' => 'input-'.$question['id'], 'class' => 'form-control chosen-select', 'style' => 'width:auto; display: inline;'] ) !!}
+                @endphp
+                  
+                {!! Form::select('question['.$key. ']]', $options_question, null, ['id' => 'input-'.$question['id'], 'class' => 'form-control chosen-select', 'style' => 'width:auto; display: inline;'] ) !!}
 
                 @if( $question['required'] === 1)
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script type="text/javascript">
+                <script>
                   globalSection{{$s}}.push({
                       type : 'select',
                       question : {{$question['id']}}
@@ -182,14 +210,19 @@
 
               @elseif( $question['question_type'] === 5)
                 {{--text --}}
+                @php
+                  $key=$question['id'];
+                  $key= (string)$key;
+                 
+                @endphp
 
-                {!! Form::text('input-'.$question['id'], '' ,['id' => 'input-'.$question['id'], 'class' => 'form-control', 'style' => 'width:50%;' ]) !!}
+                {!! Form::text('question['.$key. ']]', '' ,['id' => 'input-'.$question['id'], 'class' => 'form-control', 'style' => 'width:50%;' ]) !!}
 
                 @if( $question['required'] === 1)
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script type="text/javascript">
+                <script>
                   globalSection{{$s}}.push({
                       type : 'text',
                       question : {{$question['id']}}
@@ -198,14 +231,19 @@
 
               @elseif( $question['question_type'] === 6)
                 {{--textarea --}}
+                @php
+                  $key=$question['id'];
+                  $key= (string)$key;
+                 
+                @endphp
 
-                {!! Form::textarea('input-'.$question['id'], '' ,['id' => 'input-'.$question['id'], 'class' => 'form-control', 'rows' => '4' , 'style' => 'resize:none;' ]) !!}
+                {!! Form::textarea('question['.$key. ']]', '' ,['id' => 'input-'.$question['id'], 'class' => 'form-control', 'rows' => '4' , 'style' => 'resize:none;' ]) !!}
 
                 @if( $question['required'] === 1)
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script type="text/javascript">
+                <script>
                   globalSection{{$s}}.push({
                       type : 'textarea',
                       question : {{$question['id']}}
@@ -215,14 +253,19 @@
 
               @elseif( $question['question_type'] === 7)
                 {{--input typehead 1 (basic)  --}}
+                 @php
+                  $key=$question['id'];
+                  $key= (string)$key;
+                 
+                @endphp
 
-                {!! Form::text('input-'.$question['id'], '' ,['id' => 'input-'.$question['id'], 'class' => 'typeahead sm-form-control', 'style' => 'width:50%;display: inline;' ]) !!}
+                {!! Form::text('question['.$key. ']]', '' ,['id' => 'input-'.$question['id'], 'class' => 'typeahead sm-form-control', 'style' => 'width:50%;display: inline;' ]) !!}
 
                 @if( $question['required'] === 1)
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
                 @endif
 
-                <script type="text/javascript">
+                <script>
 
                   var path = "{{ route('autocomplete-basic') }}";
                   $('#input-'{{$question['id']}}).typeahead({
@@ -243,8 +286,13 @@
 
                 @elseif( $question['question_type'] === 8)
                 {{--input typehead 2 (maestros)  --}}
+                @php
+                  $key=$question['id'];
+                  $key= (string)$key;
+                 
+                @endphp
 
-                {!! Form::text('input-'.$question['id'], '' ,['id' => 'input-'.$question['id'], 'class' => 'typeahead sm-form-control', 'style' => 'width:50%;display: inline;' ]) !!}
+                {!! Form::text('question['.$key. ']]', '' ,['id' => 'input-'.$question['id'], 'class' => 'typeahead sm-form-control', 'style' => 'width:50%;display: inline;' ]) !!}
 
                 <label style="display: inline;" class="hidden" id="labelClear_q{{$question['id']}}">
                   <i class="icon-minus-sign" style="cursor: pointer;" onclick="habilitarTypehead({{$question['id']}});"></i>
@@ -256,7 +304,7 @@
 
                 </BR>
 
-                <script type="text/javascript">
+                <script>
 
                     var path = "{{ route('autocomplete-maestros') }}";
                     $('#input-{{$question['id']}}').typeahead({
@@ -312,21 +360,22 @@
           @if ($section->comments_required == 1)
             <label class="text-red">¿Algún comentario?</label>
             <textarea id="comments_s{{$s}}" placeholder="Escribe algún conmentario..." class="form-control" rows="5"></textarea>
-            <br/>
+            <br>
           @endif
 
-          <div class="pager center">
+          <ul class="pager center">
 
               <button type="submit" onclick="validateForm({{$s}});" class="button button-rounded button-reveal button-large button-green tright"><i class="icon-line-arrow-right"></i><span>Siguiente</span></button>
               
-          </div>
+          </ul>
 
       {!! Form::close() !!}
-
+  
     </div>
     
     @php
     $s=$s+1; //aux var for section count
+    $aux++; //aux var for section count 2
     @endphp
 
 @endforeach
@@ -430,11 +479,8 @@
           $('#errormsg_s'+section).addClass('hidden');
 
 
-
-
-
-                $('#form_section'+section).removeAttr('onsubmit');
-                $('#form_section'+section).submit();
+          $('#form_section'+section).removeAttr('onsubmit');
+          $('#form_section'+section).submit();
         }
         
       }

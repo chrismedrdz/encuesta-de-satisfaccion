@@ -4,7 +4,17 @@
 
 @php
   $total_sections=count($sections);
-  $percent_completed=( 1/$total_sections )*100;
+
+  if ( session('current_section') != null) {
+    session(['current_section' => session('current_section')]);
+
+    $sec2 = array_search(session('current_section'), $sections); 
+    $section_active = $sec2;
+  } else {
+    $section_active = 0;
+  }
+
+  $percent_completed=( $section_active/$total_sections )*100;
 @endphp
 
 @foreach ($sections as $section)
@@ -44,15 +54,17 @@
 
               @php
                 $cont=1;
+                $aux=0;
               @endphp
               @foreach ($sections as $section)
-                  @if ($cont == 1)
-                       <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active" role="tab" tabindex="0" aria-controls="tab-s{{$cont}}"> <a href="#tab-s{{$cont}}" class="ui-tabs-anchor"> <i class="icon-home2"> </i> Sección {{$cont}}</a></li>
+                  @if ($section_active == $aux)
+                       <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active" role="tab" tabindex="0" aria-controls="tab-s{{$cont}}"> <a href="#tab-s{{$cont}}" class="ui-tabs-anchor">Sección {{$cont}}</a></li>
                   @else
                       <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="tab-s{{$cont}}"><a href="#tab-s{{$cont}}" class="ui-tabs-anchor">Sección {{$cont}}</a></li>
                   @endif
               @php
               $cont++;
+              $aux++;
               @endphp
               @endforeach
 
@@ -83,6 +95,13 @@
     }
   })
 */
+
+  $('#tabs').ready(function(){
+    // Se agrego este timeout para que no crashee con el tiempo de carga de todo los tabs antes de mandar llamar al metodo
+    setTimeout(function() {
+      $( "#tabs" ).tabs( "option", "active", '{{$section_active}}' );
+    }, 500 );    
+  });
   
   function regresar (section) {
     var ant = section-2;

@@ -34,10 +34,7 @@ class User extends Authenticatable
     public function rol() {
         return $this->hasOne('App\Rol', 'id', 'rols_id');
     }
-
-
     
-
     public function school()
     {
         return $this->hasOne('App\School', 'id', 'school_id');

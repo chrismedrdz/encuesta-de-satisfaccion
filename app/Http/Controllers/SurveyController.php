@@ -17,8 +17,9 @@ class SurveyController extends Controller
         $sections = explode(',', $sections_str);
         return view('layouts.survey',
         	[ 
-        		"survey_id" => $survey_id,
+                "survey_id" => $survey_id,
         		"sections" => $sections,
+                "section_initial" => 0,
         		"usuario" => \Auth::user()
         	]
         );

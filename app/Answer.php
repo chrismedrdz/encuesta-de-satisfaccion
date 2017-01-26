@@ -4,14 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rol extends Model
-{
-    protected $fillable = [
-        'id', 'name',
-    ];
+class Answer extends Model {
     
     public function user() {
     	return $this->belongsTo('App\User');
     }
-    
 }
