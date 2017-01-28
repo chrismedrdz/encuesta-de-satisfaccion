@@ -1,4 +1,4 @@
-
+/*
 function Validator(frmname)
 {
   this.formobj=document.forms[frmname];
@@ -795,6 +795,7 @@ function VWZ_IsChecked(objcheck,value)
  }
  return false;
 }
+*/
 /*
 	Copyright (C) 2003-2008 JavaScript-Coder.com . All rights reserved.
 */

@@ -4,9 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sector extends Model
+class Comment extends Model
 {
     protected $fillable = [
-        'id', 'name', 'schools_id',
+        'id', 'users_id', 'sections_id', 'comment',
     ];
+
 }

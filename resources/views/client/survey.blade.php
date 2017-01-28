@@ -3,13 +3,24 @@
 @section('content')
 
 @php
+
+  $sections = explode(',', session('sections'));
+  $usuario_id = session('usuario_id');
+  $survey_id = session('survey_id');
+
   $total_sections=count($sections);
 
   if ( session('current_section') != null) {
-    session(['current_section' => session('current_section')]);
 
-    $sec2 = array_search(session('current_section'), $sections); 
-    $section_active = $sec2;
+    if (session('current_section') != 'finish') {
+      session(['current_section' => session('current_section')] );
+
+      $sec2 = array_search(session('current_section'), $sections); 
+      $section_active = $sec2;
+    } else {
+      $section_active = $total_sections;
+    }
+
   } else {
     $section_active = 0;
   }
@@ -70,8 +81,11 @@
 
             </ul>
 
-            @include('layouts.sections')
-
+            @if($section_active == $total_sections )
+                @include('client.finish')
+            @else
+                @include('client.sections')
+            @endif
 
         </div> <!-- #tabs end -->
 
@@ -114,9 +128,9 @@
   }
 
   function setNA(obj,question_id) {
-    $(obj).val(obj.checked ? 1 : 0);
+    //$(obj).val(obj.checked ? 1 : 0);
 
-    if ($(obj).val() == '1') {
+    if (obj.checked) {
       $('#input-'+question_id).rating('clear');
       $('#input-'+question_id).rating('refresh', {disabled: true});
       $('#input-'+question_id).val('1111');

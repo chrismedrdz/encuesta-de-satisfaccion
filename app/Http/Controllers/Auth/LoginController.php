@@ -5,6 +5,15 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+
+use Illuminate\Http\Request;
+
+
+use Auth;
+use Session;
+
+use App\Survey;
+
 class LoginController extends Controller
 {
     /*
@@ -25,15 +34,63 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    //protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('guest', ['except' => 'logout']);
+
+    
+    protected function guard() {
+        return Auth::guard('client');
+    }
+
+    public function showLoginForm() {
+        if(Auth::check()){
+            return redirect()->intended('/');
+        }else{
+            return view('client.access');
+        }
+    }
+
+    public function authenticateClients(Request $request) {
+
+        $messages = [
+            'code.required'        => 'El código de acceso es requerido.',
+        ];
+
+        $this->validate($request, [
+            'code' => 'required'
+        ], $messages);
+
+
+        $code= $request->only('code');
+        $id=Self::getId($code);
+
+        if (Auth::guard('client')->loginUsingId($id, true) ) {
+            // Authentication passed...
+            return redirect()->intended('/');
+        } else {
+
+            $loginFailed = [
+                'loginFailed' => 'El código de acceso es incorrecto',
+            ];
+            return redirect()->back()->withInput()->withErrors($loginFailed);
+        }
+    }
+
+
+    protected function getId($code){
+        $id=Survey::where('code', $code)->value('id');
+        return $id;
+    }
+
+    public function logout() {
+
+        Auth::guard('client')->logout();
+        Session::flush();
+        return redirect()->intended('/login');
     }
 }

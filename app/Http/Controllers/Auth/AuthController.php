@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 use App\User;
+use App\Survey;
 use Validator;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -12,6 +14,9 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Session;
 //use DB;
+
+
+use Config;
 
 class AuthController extends Controller
 {
@@ -34,12 +39,14 @@ class AuthController extends Controller
      *
      * @return void
      */
+    /*
     public function __construct(Guard $auth)
     {
-        $this->auth = $auth;
-        $this->middleware('guest', ['except' => 'getLogout']);
+        //$this->auth = $auth;
+        $this->middleware('survey', ['except' => 'getLogout']);
       
     }
+    */
 
     /**
      * Get a validator for an incoming registration request.
@@ -48,33 +55,7 @@ class AuthController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
    
-
-
-    //login1
-
-    protected function getAccess()
-    {
-        return view("access");
-    }
-
-
-    public function postAccess(Request $request) {
-   
-        $this->validate($request, [
-            'code' => 'required',
-        ]);
-
-        $code= $request->only('code');
-        $id=Self::getId($code);
-
-        if($this->auth->loginUsingId($id, true)){
-            return redirect('home');
-        } else {
-            return redirect("/");
-        }
-    
-    }
-
+/*
 
 //login2
 
@@ -83,22 +64,11 @@ class AuthController extends Controller
         return view("login");
     }
 
-    protected function getId($code){
-        $id=User::where('code', $code)->value('id');
-        return $id;
-    }
-
-
-       
-
-        public function postLogin(Request $request)
-   {
+    public function postLogin(Request $request) {
     $this->validate($request, [
         'email' => 'required',
         'password' => 'required',
     ]);
-
-
 
     $credentials = $request->only('email', 'password');
 
@@ -112,8 +82,6 @@ class AuthController extends Controller
 
     }
 
-
-//login
 
  //registro   
 
@@ -161,18 +129,15 @@ class AuthController extends Controller
 
 //registro
 
-protected function getLogout()
-    {
+*/
+
+    protected function getLogout() {
         $this->auth->logout();
 
         Session::flush();
 
         return redirect('/');
     }
-
-
-
-
 
 
 }

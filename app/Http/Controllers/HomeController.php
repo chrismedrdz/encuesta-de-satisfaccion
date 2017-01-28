@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use  App\User;
+use  App\Survey;
 use Session;
 
 class HomeController extends Controller {
@@ -21,84 +22,28 @@ class HomeController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct()
-	{
-		$this->middleware('auth');
+	
+	public function __construct() {
+		$this->middleware('auth:client');
 
 	}
-
+	
 	/**
 	 * Show the application dashboard to the user.
 	 *
 	 * @return Response
 	 */	
-	public function index()
-	{
-		$usuarioactual=\Auth::user()->rols_id;
-		switch ($usuarioactual) {
-            case '1':
-                return redirect('admin')->with("usuario",  $usuarioactual);
-                break;
-            case '2':
-                return redirect('mayor')->with("usuario",  $usuarioactual);
-                break;
-            case '3':
-                return redirect('secundaria')->with("usuario",  $usuarioactual);
-                break;
-            case '4':
-                return redirect('tutor')->with("usuario",  $usuarioactual);
-                break;
-            case '5':
-                return redirect('personal')->with("usuario",  $usuarioactual);
-                break;
-                
-            default:
-                return 'algo salio mal';
-                break;
-        
+	public function index()	{
+
+		$survey=\Auth::guard('client')->user();
+
+		# Si ya fue registrado el usuario y se quiere regresar, lo mandará nuevamente a la encuesta, hasta que no la termine 
+		if ( session('usuario_id') != null ) {
+			return redirect('survey/'.$survey->id);
+		} else {
+			return view('client.index')->with("survey",  $survey);
 		}
 
 	}
-
-	public function personal(){
-		$usuarioactual=\Auth::user();
-
-		return view('personal.home')->with("usuario",  $usuarioactual);
-
-	}
-
-	public function mayor(){
-		
-		view()->share('sess_usr', \Auth::user());
-
-		$usuario=\Auth::user();
-        return view('mayor.index',compact( 'usuario', $usuario) );
-		//return view('mayor.index')->with("usuario",  $usuarioactual);
-
-	}
-
-	public function secundaria(){
-		
-	$usuarioactual=\Auth::user();
-		return view('secundaria.home')->with("usuario",  $usuarioactual);
-
-	}
-
-	public function tutor(){
-		
-	$usuarioactual=\Auth::user();
-		return view('tutor.home')->with("usuario",  $usuarioactual);
-
-	}
-
-	public function admin(){
-		
-	$usuarioactual=\Auth::user();
-		return view('admin.home')->with("usuario",  $usuarioactual);
-
-	}
-
-
-
 
 }

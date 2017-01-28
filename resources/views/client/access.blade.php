@@ -31,10 +31,20 @@
 												<input type="text" id="code" name="code" value="" class="form-control not-dark text-center" autofocus="">
 											</div>
 
-											<div class="col_full nobottommargin">
+											<div class="col_full ">
 												<button class="button button-3d button-black nomargin" id="login-form-submit" name="login-form-submit" type="submit">Ingresar</button>
 												
 											</div>
+
+											@if (count($errors) > 0)
+											    <div class="style-msg errormsg">
+											        <div class="sb-msg">
+											            @foreach ($errors->all() as $error)
+											                {{ $error }}
+											            @endforeach
+											        </div>
+											    </div>
+											@endif
 										</form>
 
 										<div class="line line-sm"></div>

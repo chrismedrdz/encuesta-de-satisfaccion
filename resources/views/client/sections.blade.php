@@ -14,7 +14,7 @@
 @foreach ($sections as $sec)
     @php
     $section=\App\Section::find($sec);
-
+    
     @endphp
 
     <script type="text/javascript">
@@ -38,14 +38,12 @@
             </div>
           @endif
 
-          
-
           {!! Form::open(['id' => 'form_section'.$s, 'name' => 'form_section'.$s, 'onsubmit' => 'return false', 'method' => 'POST',  'url' => url()->current().'/postanswers'
           ] ) !!}
 
           {!! Form::hidden('section_id', $sec ) !!}
           {!! Form::hidden('survey_id', $survey_id ) !!}
-          {!! Form::hidden('user_id', $usuario->id ) !!}
+          {!! Form::hidden('user_id', $usuario_id) !!}
     
           @php
             $questions = explode(',', $section->questions_ids);
@@ -72,7 +70,7 @@
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="question[{{$key}}]]" value="1111"> No Aplica 
                   </label>
                 @endif
 
@@ -115,7 +113,7 @@
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="question[{{$key}}]]" value="1111"> No Aplica 
                   </label>
                 @endif
 
@@ -162,7 +160,7 @@
 
                 @if( $question->type['na_active'] === 1)
                   <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="na_q{{$question['id']}}" value="0"> No Aplica 
+                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="question[{{$key}}]]" value="1111"> No Aplica 
                   </label>
                 @endif
 
@@ -359,7 +357,7 @@
 
           @if ($section->comments_required == 1)
             <label class="text-red">¿Algún comentario?</label>
-            <textarea id="comments_s{{$s}}" placeholder="Escribe algún conmentario..." class="form-control" rows="5"></textarea>
+            <textarea id="comments_s{{$s}}" placeholder="Escribe algún conmentario..." class="form-control" rows="5" name="comment"></textarea>
             <br>
           @endif
 
