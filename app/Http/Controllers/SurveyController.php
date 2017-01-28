@@ -20,11 +20,10 @@ class SurveyController extends Controller {
             //Ok
 
             $messages = [
-                'alumno_nombre' => '',
-                'alumno_apaterno' => '',
-                'alumno_amaterno' => '',
-                'alumno_colegio' => '',
-                'survey_id' => '',
+                'alumno_nombre' => 'El nombre es requerido y debe ser mayor a 3 caracteres',
+                'alumno_apaterno' => 'El apellido paterno es requerido y debe ser mayor a 3 caracteres.',
+                'alumno_amaterno' => 'El apellido materno es requerido y debe ser mayor a 3 caracteres.',
+                'alumno_colegio' => 'El colegio es requerido',
             ];
 
             $this->validate($request, [
