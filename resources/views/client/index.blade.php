@@ -12,7 +12,7 @@ p{margin-bottom: 0px;}
 ============================================= -->
 <section id="content">
 
-	<div class="content-wrap" style="">
+	<div class="content-wrap">
 
 		<div class="container clearfix" id="contenido_principal">	
 
@@ -47,17 +47,15 @@ p{margin-bottom: 0px;}
 								<label for="alumno_colegio">Colegio:</label>
 								<select id="alumno_colegio" name="alumno_colegio" onchange="loadSectors(this);" class="form-control text-center" required="required">
 									<option value>Seleccione</option>
-
-									@if ( strpos($survey->name, 'Mayor') !== false  )
-
+									@if ( strpos($survey->name, 'Menor') !== false  )
+							    		<option value="ICA">Colegio Isabel la Católica</option>
+										<option value="LSB">Colegio La Salle</option>
+									@elseif ( strpos($survey->name, 'Mayor') !== false  )
 							    		<option value="ICC">Colegio Isabel la Católica</option>
 										<option value="LSC">Colegio La Salle</option>
-
 							    	@elseif ( strpos($survey->name, 'Secundaria') !== false  )
-
 							    		<option value="ICD">Colegio Isabel la Católica</option>
 										<option value="FGS">Colegio Francisco G. Sada</option>
-
 							    	@elseif ( strpos($survey->name, 'Padre') !== false  )
 							    		<option value="ICB">Preescolar</option>
 							    		<option value="ICA">Primaria Menor CILAC</option>
@@ -66,9 +64,7 @@ p{margin-bottom: 0px;}
 										<option value="ICC">Primaria Mayor La Salle</option>
 										<option value="ICD">Secundaria CILAC</option>
 										<option value="FGS">Secundaria FGS</option>
-
 							    	@elseif ( strpos($survey->name, 'Empleados') !== false  )
-
 							    		<option value="ICB">Preescolar</option>
 							    		<option value="ICA">Primaria Menor CILAC</option>
 										<option value="LSB">Primaria Menor La Salle</option>
@@ -76,10 +72,7 @@ p{margin-bottom: 0px;}
 										<option value="ICC">Primaria Mayor La Salle</option>
 										<option value="ICD">Secundaria CILAC</option>
 										<option value="FGS">Secundaria FGS</option>
-
 							    	@endif
-
-									
 								</select>
 							</div>
 

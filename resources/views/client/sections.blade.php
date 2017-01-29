@@ -4,6 +4,7 @@
 .control-label {display: block;}
 .rating-disabled .rating { opacity: 0.5; }
 .typeahead { width:50%; }
+h1{ margin-top: 0px;}
 </style>
 <div class="tab-container">
 @php
@@ -32,11 +33,12 @@
             <div class="sb-msg"><i class="icon-remove"></i><strong>Ups!</strong> Debes completar todos los reactivos para continuar.</div>
           </div>
 
-          @if($section->description)
-            <div class="title-block">
-              <p class="text-blue">{{$section->description}}</p>
-            </div>
-          @endif
+          <div class="title-block">
+            <h1>{{$section->category->name}}</h1>
+            @if($section->description)
+            <span class="text-blue">A short sub-text to define the heading</span>
+            @endif
+          </div>
 
           {!! Form::open(['id' => 'form_section'.$s, 'name' => 'form_section'.$s, 'onsubmit' => 'return false', 'method' => 'POST',  'url' => url()->current().'/postanswers'
           ] ) !!}

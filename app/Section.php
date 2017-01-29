@@ -21,4 +21,9 @@ class Section extends Model
         return $this->hasOne('App\Question', 'id', 'questions_ids');
     }
 
+    public function category()
+    {
+        return $this->hasOne('App\Category', 'id', 'category_id');
+    }
+
 }

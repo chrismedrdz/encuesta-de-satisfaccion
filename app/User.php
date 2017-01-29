@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'code', 'rols_id',
+        'name', 'email', 'password', 'rols_id',
     ];
 
     /**
@@ -31,23 +31,28 @@ class User extends Authenticatable
         return $this->hasOne('App\UserInfo', 'user_id', 'id');
     }
 
+    public function schools() {
+        return $this->belongsToMany('App\Models\School', 'user_has_school', 'user_id', 'school_id');
+    }
+
     public function rol() {
         return $this->hasOne('App\Rol', 'id', 'rols_id');
     }
-    
-    public function school()
-    {
-        return $this->hasOne('App\School', 'id', 'school_id');
+
+    /**
+     * Get the user that created the user.
+     */
+    public function creado_por() {
+        //return $this->belongsTo('App\User', 'created_by', 'id')->withTrashed();
+        return $this->belongsTo('App\User', 'created_by', 'id');
     }
 
-    public function sector()
-    {
-        return $this->hasOne('App\Sector', 'id', 'sectors_id');
-    }
-
-    public function survey()
-    {
-        return $this->hasOne('App\Survey', 'id', 'survey_id');
+    /**
+     * Get the last user that updated the user.
+     */
+    public function actualizado_por() {
+        //return $this->belongsTo('App\User', 'updated_by', 'id')->withTrashed();
+        return $this->belongsTo('App\User', 'updated_by', 'id');
     }
 
 }
