@@ -33,6 +33,9 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 	============================================= -->
 	<script type="text/javascript" src="/template/js/jquery.js"></script>
 	<script type="text/javascript" src="/template/js/plugins.js"></script>
+	<link href="{{ asset('select2-4.0.3/dist/css/select2.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('css/select2-bootstrap.css') }}" rel="stylesheet" />
+	
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
 
@@ -140,6 +143,21 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 <!-- Footer Scripts
 ============================================= -->
 <script type="text/javascript" src="{{ url('/template/js/functions.js') }}"></script>
+<script src="{{ asset('select2-4.0.3/dist/js/select2.min.js') }}"></script>	
+
+<script type="text/javascript">
+		
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip(); 
+
+	    $(".select2").select2({
+			allowClear : true,
+			placeholder : 'Selecciona una opción'
+		});
+	
+	});
+</script>
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

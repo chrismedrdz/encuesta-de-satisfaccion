@@ -78,9 +78,9 @@ p{margin-bottom: 0px;}
 
 							<div class="col_full nobottommargin">
 
-								<button class="button button-3d button-green nomargin" id="login-form-submit" name="login-form-submit" type="submit" onclick="validateFormUser();">Iniciar Encuesta</button>
+								<button class="button button-3d button-green nomargin" id="button-form-submit" name="button-form-submit" type="submit" onclick="validateFormUser();">Iniciar Encuesta</button>
 
-								<a class="button button-3d button-red nomargin" id="login-form-logout" name="login-form-logout" type="button"  href="{{ url('/logout') }}">Salir</a>
+								<a class="button button-3d button-red nomargin" id="button-form-logout" name="button-form-logout" type="button"  href="{{ url('/logout') }}">Salir</a>
 							</div>
 						</form>
 
@@ -109,6 +109,7 @@ p{margin-bottom: 0px;}
 	function validateFormUser() {
         $("#form_user").validate({
 			submitHandler: function(form) {
+				$('#button-form-submit').attr('disabled', 'disabled');
 			    form.submit();
 			}
  		});

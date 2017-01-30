@@ -36,7 +36,7 @@ h1{ margin-top: 0px;}
           <div class="title-block">
             <h1>{{$section->category->name}}</h1>
             @if($section->description)
-            <span class="text-blue">A short sub-text to define the heading</span>
+            <span class="text-blue">{{$section->description}}</span>
             @endif
           </div>
 
@@ -186,7 +186,7 @@ h1{ margin-top: 0px;}
                 </script>
 
               @elseif( $question['question_type'] === 4)
-                {{--select (multiple) --}}
+                {{--select unique --}}
                 @php
                   $questions_str = ','.$question->options;
                   $options_question = explode(',', $questions_str);
@@ -196,6 +196,29 @@ h1{ margin-top: 0px;}
                 @endphp
                   
                 {!! Form::select('question['.$key. ']]', $options_question, null, ['id' => 'input-'.$question['id'], 'class' => 'form-control chosen-select', 'style' => 'width:auto; display: inline;'] ) !!}
+
+                @if( $question['required'] === 1)
+                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
+                @endif
+
+                <script>
+                  globalSection{{$s}}.push({
+                      type : 'select',
+                      question : {{$question['id']}}
+                  });
+                </script>
+
+              @elseif( $question['question_type'] === 9)
+                {{--select multiple --}}
+                @php
+                  $questions_str = ','.$question->options;
+                  $options_question = explode(',', $questions_str);
+                  $key=$question->id;
+                  $keys= array($key);                  
+
+                @endphp
+                  
+                {!! Form::select('question['.$key. ']]', $options_question, null, ['id' => 'input-'.$question['id'], 'class' => 'form-control chosen-select select2', 'multiple' => 'multiple', 'style' => 'width:auto; display: inline;'] ) !!}
 
                 @if( $question['required'] === 1)
                   <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
@@ -282,8 +305,6 @@ h1{ margin-top: 0px;}
                   });
                 </script>
 
-
-
                 @elseif( $question['question_type'] === 8)
                 {{--input typehead 2 (maestros)  --}}
                 @php
@@ -347,6 +368,9 @@ h1{ margin-top: 0px;}
                     });
 
                 </script>
+
+              @elseif( $question['question_type'] === 10)
+                {{--Texto plano (nada que hacer) --}}
 
               @else
                   <p>Error</p>
