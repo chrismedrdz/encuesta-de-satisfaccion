@@ -41,7 +41,7 @@
   <style>
   p{margin-bottom: 0px;}
   textarea{resize:none;}
-  .tab-nav {/*display: none;*/}
+  .tab-nav {display: none;}
   .skills li .progress-percent {z-index: 1000;}
   select{margin-bottom: 10px;}
   </style>
