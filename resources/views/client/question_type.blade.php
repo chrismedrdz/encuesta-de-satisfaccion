@@ -145,9 +145,9 @@
 @endphp
 
 @if( $question['init_hidden'] === 1)
-  {!! Form::select('question['.$key.']', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select hidden', 'style' => 'width:auto; display: inline;'] ) !!}
+  {!! Form::select('question['.$key.']]', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select hidden', 'style' => 'width:auto; display: inline;'] ) !!}
 @else 
-  {!! Form::select('question['.$key.']', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select', 'style' => 'width:auto; display: inline;'] ) !!}
+  {!! Form::select('question['.$key.']]', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select', 'style' => 'width:auto; display: inline;'] ) !!}
 @endif
 
 @if( $question['required'] === 1)
@@ -202,9 +202,9 @@
 @endphp
 
 @if( $question['init_hidden'] === 1)
-  {!! Form::text('question['.$key.']', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control hidden', 'style' => 'width:50%;' ]) !!}
+  {!! Form::text('question['.$key.']]', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control hidden', 'style' => 'width:50%;' ]) !!}
 @else 
-  {!! Form::text('question['.$key.']', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control', 'style' => 'width:50%;' ]) !!}
+  {!! Form::text('question['.$key.']]', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control', 'style' => 'width:50%;' ]) !!}
 @endif
 
 @if( $question['required'] === 1)

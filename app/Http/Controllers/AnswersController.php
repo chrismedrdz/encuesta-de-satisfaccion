@@ -22,21 +22,25 @@ class AnswersController extends Controller {
     	//itero el arrray de question $clave como is de pregunta y $valor como resultado
         $i=0;
 		foreach($questions as $clave  => $valor){
-			$answer= new Answer;
-			$answer->user_id=$request->input('user_id');
-    		$answer->section_id=$request->input('section_id');
-    		$current_section = $answer->section_id;
-    		$answer->survey_id=$request->input('survey_id');
 
-    		$answer->question_id=$clave;
-    		$answer->result=$valor;
-    		
-    		//validación de llenado correcto de infomación a base de datos
-    		if($answer->save()){
-    			continue;
-    		}else{
-    			return view('layouts.survey', "Error al guardar los datos");
-    		}
+            if ($valor != '0') {
+                $answer= new Answer;
+                $answer->user_id=$request->input('user_id');
+                $answer->section_id=$request->input('section_id');
+                $current_section = $answer->section_id;
+                $answer->survey_id=$request->input('survey_id');
+
+                $answer->question_id=$clave;
+                $answer->result=$valor;
+                
+                //validación de llenado correcto de infomación a base de datos
+                if($answer->save()){
+                    continue;
+                }else{
+                    return view('layouts.survey', "Error al guardar los datos");
+                }
+            }
+			
         $i++;
 		}
 
