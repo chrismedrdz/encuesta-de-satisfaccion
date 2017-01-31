@@ -41,9 +41,23 @@
   <style>
   p{margin-bottom: 0px;}
   textarea{resize:none;}
-  .tab-nav {display: none;}
+  .tab-nav {/*display: none;*/}
   .skills li .progress-percent {z-index: 1000;}
+  select{margin-bottom: 10px;}
   </style>
+
+  @php 
+
+      function obtenerCadena($contenido,$inicio,$fin) {
+          $r = explode($inicio, $contenido);
+          if (isset($r[1])){
+              $r = explode($fin, $r[1]);
+              return $r[0];
+          }
+          return '';
+      }
+
+    @endphp
 
 
   <div class="content-wrap" style="padding:0px;">

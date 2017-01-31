@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\DB;
 use  App\User;
 use  App\Survey;
+use  App\GroupQuestions;
 use Session;
 
 class HomeController extends Controller {

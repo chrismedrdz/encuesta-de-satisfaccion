@@ -15,8 +15,8 @@ h1{ margin-top: 0px;}
 @foreach ($sections as $sec)
     @php
     $section=\App\Section::find($sec);
-    
     @endphp
+
 
     <script type="text/javascript">
         /* Global Variable for section validate*/
@@ -51,330 +51,119 @@ h1{ margin-top: 0px;}
             $questions = explode(',', $section->questions_ids);
           @endphp
           
-          @php$i=1;@endphp
+          @php$i=1;/* Contador para el # Pregunta */@endphp
           @foreach ($questions as $question_id)
 
-            @php
-            $question=\App\Question::find($question_id);
-            @endphp
 
-            {!! Form::label('', $i.' - '. $question['description'], ['class' => 'control-label']) !!}
-              
-              @if( $question['question_type'] === 1)
-                {{--3 estrellas --}}
-                 @php
-                  $key=$question->id;{{--Le asigno a la variable $key el id de la pregunta--}}
-                  $key= (string)$key;
-                 
-                @endphp
-                {{--Hago un array y fuerzo a que el indice del array sea el id de la pregunta y que el valor sea lo que el usuario desee según las estrellas de rating js--}}
-                {!! Form::text('question['.$key. ']]', '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
+            @if ( strpos($question_id, 'group') !== false  ) 
+            {{-- Es un grupo de preguntas --}}
+              @php
+              $grupo=\App\GroupQuestions::find(str_replace('group_','', $question_id));
+              //dd($grupo->questions);
+              @endphp
 
-                @if( $question->type['na_active'] === 1)
-                  <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="question[{{$key}}]]" value="1111"> No Aplica 
-                  </label>
-                @endif
+              <div class="panel panel-primary hidden" id="grupo_{{$grupo->id}}">
+                  @if($grupo->panel_title != null)
+                    <div class="panel-heading">
+                      <h3 class="panel-title">{{$grupo->panel_title}}</h3>
+                    </div>
+                  @endif
 
-                @if( $question['required'] === 1)
-                <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
+                  <div class="panel-body">
+                  @php$j=1;/* Contador para el # Pregunta */@endphp
+                  @foreach ($grupo->questions as $question_group)
 
-                <script>
-                  $("#input-{{$question['id']}}").rating({
-                    min:0, max:{{$question->type->high_rank}}, stars:{{$question->type->high_rank}}, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:true,
-                      starCaptions: {
-                          '1': 'Insatisfecho',
-                          '2': 'Ni Insatisfecho ni Satisfecho',
-                          '3': 'Satisfecho',
-                          '1111':   'No Aplica'
-                      },
-                      starCaptionClasses: {
-                          '1': 'label label-danger',
-                          '2': 'label label-info',
-                          '3': 'label label-success'
-                      }
-                  }).on("rating.change", function(event, value, caption) {
-                    $('#input-{{$question['id']}}').val(value);
-                  });
-                  globalSection{{$s}}.push({
-                      type : 'rating',
-                      question : {{$question['id']}}
-                  });
-                </script>
+                      @php
+                      $question=\App\Question::find($question_group->id);
+                      @endphp
 
-              @elseif( $question['question_type'] === 2)
-                {{--5 estrellas --}}
-                 @php
-                  $key=$question['id'];
-                  $key= (string)$key;
-                 
-                @endphp
+                      {!! Form::label('', $j.' - '. $question['description'], ['class' => 'control-label']) !!}
+                      
+                      @include('client.question_type')
 
-                {!! Form::text('question['.$key. ']]', '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
+                  @php $j++; @endphp
+                  @endforeach
 
-                @if( $question->type['na_active'] === 1)
-                  <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="question[{{$key}}]]" value="1111"> No Aplica 
-                  </label>
-                @endif
+                  </div>
+              </div>
 
-                @if( $question['required'] === 1)
-                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
+            @else
+            {{-- Es una pregunta normal --}}
+              @php
+              $question=\App\Question::find($question_id);
+              @endphp
 
-                <script>
-                  $("#input-{{$question['id']}}").rating({
-                    min:0, max:{{$question->type->high_rank}}, stars:{{$question->type->high_rank}}, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:true,
-                      starCaptions: {
-                          '1': 'Muy Insatisfecho',
-                          '2': 'Insatisfecho',
-                          '3': 'Ni insatisfecho ni satisfecho',
-                          '4': 'Satisfecho',
-                          '5':   'Muy Satisfecho',
-                          '1111':   'No Aplica'
-                      },
-                      starCaptionClasses: {
-                          '1': 'label label-danger',
-                          '2': 'label label-warning',
-                          '3': 'label label-info',
-                          '4': 'label label-primary',
-                          '5': 'label label-success'
-                      }
-                  }).on("rating.change", function(event, value, caption) {
-                    $('#input-{{$question['id']}}').val(value);
-                  });
-                  globalSection{{$s}}.push({
-                      type : 'rating',
-                      question : {{$question['id']}}
-                  });
-                </script>
-
-              @elseif( $question['question_type'] === 3)
-                {{--10 estrellas --}}
-                @php
-                  $key=$question['id'];
-                  $key= (string)$key;
-                 
-                @endphp
-
-                {!! Form::text('question['.$key. ']]', '0' ,['id' => 'input-'.$question['id'], 'class' => 'rating' ]) !!}
-
-                @if( $question->type['na_active'] === 1)
-                  <label style="display: inline; font-weight:bold; color: #C02942;">
-                    <input type="checkbox" onclick="setNA(this,{{$question['id']}});" id="na_q{{$question['id']}}" name="question[{{$key}}]]" value="1111"> No Aplica 
-                  </label>
-                @endif
-
-                @if( $question['required'] === 1)
-                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
-
-                <script>
-                  $("#input-{{$question['id']}}").rating({
-                    min:0, max:10, stars:10, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:false
-                  }).on("rating.change", function(event, value, caption) {
-                    //alert(value);
-                    $('#input-{{$question['id']}}').val(value);
-                  });
-
-                  globalSection{{$s}}.push({
-                      type : 'rating',
-                      question : {{$question['id']}}
-                  });
-
-                </script>
-
-              @elseif( $question['question_type'] === 4)
-                {{--select unique --}}
-                @php
-                  $questions_str = ','.$question->options;
-                  $options_question = explode(',', $questions_str);
-                  $key=$question->id;
-                  $keys= array($key);                  
-
-                @endphp
-                  
-                {!! Form::select('question['.$key. ']]', $options_question, null, ['id' => 'input-'.$question['id'], 'class' => 'form-control chosen-select', 'style' => 'width:auto; display: inline;'] ) !!}
-
-                @if( $question['required'] === 1)
-                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
-
-                <script>
-                  globalSection{{$s}}.push({
-                      type : 'select',
-                      question : {{$question['id']}}
-                  });
-                </script>
-
-              @elseif( $question['question_type'] === 9)
-                {{--select multiple --}}
-                @php
-                  $questions_str = ','.$question->options;
-                  $options_question = explode(',', $questions_str);
-                  $key=$question->id;
-                  $keys= array($key);                  
-
-                @endphp
-                  
-                {!! Form::select('question['.$key. ']]', $options_question, null, ['id' => 'input-'.$question['id'], 'class' => 'form-control chosen-select select2', 'multiple' => 'multiple', 'style' => 'width:auto; display: inline;'] ) !!}
-
-                @if( $question['required'] === 1)
-                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
-
-                <script>
-                  globalSection{{$s}}.push({
-                      type : 'select',
-                      question : {{$question['id']}}
-                  });
-                </script>
-
-              @elseif( $question['question_type'] === 5)
-                {{--text --}}
-                @php
-                  $key=$question['id'];
-                  $key= (string)$key;
-                 
-                @endphp
-
-                {!! Form::text('question['.$key. ']]', '' ,['id' => 'input-'.$question['id'], 'class' => 'form-control', 'style' => 'width:50%;' ]) !!}
-
-                @if( $question['required'] === 1)
-                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
-
-                <script>
-                  globalSection{{$s}}.push({
-                      type : 'text',
-                      question : {{$question['id']}}
-                  });
-                </script>
-
-              @elseif( $question['question_type'] === 6)
-                {{--textarea --}}
-                @php
-                  $key=$question['id'];
-                  $key= (string)$key;
-                 
-                @endphp
-
-                {!! Form::textarea('question['.$key. ']]', '' ,['id' => 'input-'.$question['id'], 'class' => 'form-control', 'rows' => '4' , 'style' => 'resize:none;' ]) !!}
-
-                @if( $question['required'] === 1)
-                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
-
-                <script>
-                  globalSection{{$s}}.push({
-                      type : 'textarea',
-                      question : {{$question['id']}}
-                  });
-                </script>
-
-
-              @elseif( $question['question_type'] === 7)
-                {{--input typehead 1 (basic)  --}}
-                 @php
-                  $key=$question['id'];
-                  $key= (string)$key;
-                 
-                @endphp
-
-                {!! Form::text('question['.$key. ']]', '' ,['id' => 'input-'.$question['id'], 'class' => 'typeahead sm-form-control', 'style' => 'width:50%;display: inline;' ]) !!}
-
-                @if( $question['required'] === 1)
-                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
-
-                <script>
-
-                  var path = "{{ route('autocomplete-basic') }}";
-                  $('#input-'{{$question['id']}}).typeahead({
-                      source:  function (query, process) {
-                      return $.get(path, { query: query }, function (data) {
-                          return process(data);
-                        });
-                      }
-                  });
-
-                  globalSection{{$s}}.push({
-                      type : 'text',
-                      question : {{$question['id']}}
-                  });
-                </script>
-
-                @elseif( $question['question_type'] === 8)
-                {{--input typehead 2 (maestros)  --}}
-                @php
-                  $key=$question['id'];
-                  $key= (string)$key;
-                 
-                @endphp
-
-                {!! Form::text('question['.$key. ']]', '' ,['id' => 'input-'.$question['id'], 'class' => 'typeahead sm-form-control', 'style' => 'width:50%;display: inline;' ]) !!}
-
-                <label style="display: inline;" class="hidden" id="labelClear_q{{$question['id']}}">
-                  <i class="icon-minus-sign" style="cursor: pointer;" onclick="habilitarTypehead({{$question['id']}});"></i>
-                </label>
-
-                @if( $question['required'] === 1)
-                  <span id="labelRequired_q{{$question['id']}}" class="label label-danger hidden">Requerido</span>
-                @endif
-
-                </BR>
-
-                <script>
-
-                    var path = "{{ route('autocomplete-maestros') }}";
-                    $('#input-{{$question['id']}}').typeahead({
-                        source:  function (query, process) {
-                        return $.get(path, { query: query }, function (data) {
-                            return process(data);
-                          });
-                        },
-                        displayText: function (item) {
-                            return item.value + " &ndash; " + item.description;
-                        },
-                        highlighter: function(item) {
-                            var query = this.query;
-                            if(!query) {
-                                return '<div> ' + item + '</div>';
-                            }
-
-                            var reEscQuery = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-                            var reQuery = new RegExp('(' + reEscQuery + ')', "gi");
-
-                            var jElem = $('<div></div>').html(item);
-                            var textNodes = $(jElem.find('*')).add(jElem).contents().filter(function () { return this.nodeType === 3; });
-                            textNodes.replaceWith(function() {
-                                return $(this).text().replace(reQuery, '<strong>$1</strong>')
-                            });
-
-                            return jElem.html();
-                        },
-                        afterSelect: function( item ){
-                            $('#inputs-{{$question['id']}}').val( item.value );
-                            $('#inputs-{{$question['id']}}').attr( 'readonly' , 'readonly');
-
-                            $('#labelClear_q{{$question['id']}}').removeClass('hidden');
-                        }
-                    });
-
-                    globalSection{{$s}}.push({
-                        type : 'text',
-                        question : {{$question['id']}}
-                    });
-
-                </script>
-
-              @elseif( $question['question_type'] === 10)
-                {{--Texto plano (nada que hacer) --}}
-
-              @else
-                  <p>Error</p>
+              @if( $question['init_hidden'] === 1)
+                {!! Form::label('', $i.' - '. $question['description'], ['class' => 'control-label hidden']) !!}  
+              @else 
+                {!! Form::label('', $i.' - '. $question['description'], ['class' => 'control-label']) !!}
               @endif
+              
+              @include('client.question_type')
+
+              {{-- Rules --}}
+              @if($question['rule_id'] != null)
+                  @php 
+                      $rule = explode(';', $question->rule->action);
+                      $arrayRules = [];
+                      for ($i=0; $i < count($rule); $i++) { 
+                        $option = explode(':', $rule[$i]);
+
+                        $arrayRules[] = array(
+                          'option' => $option[0], 
+                          'show' => trim(obtenerCadena($option[1],'show',',')),
+                          'hide' => trim(obtenerCadena($option[1],'hide',',')),
+                        );
+                      }
+                  @endphp
+
+                  @if ( strpos($question_id, 'group') !== false  ) 
+                  {{-- Es un grupo de preguntas --}}
+                    @php $input_id = $question_id.'-'.$question['id']; @endphp
+                  @else
+                  {{-- Es una pregunta normal --}}
+                    @php $input_id = $question_id; @endphp
+                  @endif
+
+                  <script type="text/javascript">
+                      $(function(){
+                        $("#input-{{$input_id}}").change(function(){
+                        @foreach($arrayRules as $rules)
+                              if( $(this).val() == '{{$rules['option']}}' ) {
+
+                                @if( $rules['show'] != '' && strpos($rules['show'], 'question_id') !== false ) 
+                                  @php $input_id_show = explode('=', $rules['show']); @endphp
+                                  $('#input-{{$input_id_show[1]}}').removeClass('hidden');
+                                  $('#input-{{$input_id_show[1]}}').prev().removeClass('hidden');
+                                @elseif( $rules['show'] != '' && strpos($rules['show'], 'group_question') !== false ) 
+                                  @php $input_id_show = explode('=', $rules['show']); @endphp
+                                  $('#grupo_{{$input_id_show[1]}}').removeClass('hidden');
+                                @endif
+
+                                @if( $rules['hide'] != '' && strpos($rules['hide'], 'question_id') !== false )
+                                  @php $input_id_hide = explode('=', $rules['hide']); @endphp
+                                  $('#input-{{$input_id_hide[1]}}').addClass('hidden');
+                                  $('#input-{{$input_id_hide[1]}}').prev().addClass('hidden');
+                                @elseif( $rules['hide'] != '' && strpos($rules['hide'], 'group_question') !== false )
+                                  @php $input_id_hide = explode('=', $rules['hide']); @endphp
+                                  $('#grupo_{{$input_id_show[1]}}').addClass('hidden');
+                                @endif
+
+                              }
+                            
+                        @endforeach
+
+                          });
+                      });
+
+                  </script>
+
+
+              @endif
+
+
+            @endif              
+              
 
             @php$i++;@endphp
           @endforeach
@@ -388,9 +177,7 @@ h1{ margin-top: 0px;}
           @endif
 
           <ul class="pager center">
-
               <button type="submit" onclick="validateForm({{$s}});" class="button button-rounded button-reveal button-large button-green tright"><i class="icon-line-arrow-right"></i><span>Siguiente</span></button>
-              
           </ul>
 
       {!! Form::close() !!}

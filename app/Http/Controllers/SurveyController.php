@@ -7,6 +7,7 @@ use  App\Survey;
 use  App\Section;
 use  App\Sector;
 use  App\Question;
+use  App\GroupQuestions;
 use  App\UserSurvey;
 
 class SurveyController extends Controller {
