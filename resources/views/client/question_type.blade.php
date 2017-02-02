@@ -267,7 +267,7 @@
 
 <script>
 
-  var path = "{{ route('autocomplete-basic') }}";
+  var path = "{{ url('autocomplete-basic') }}";
   $('#input-'{{$input_id}}).typeahead({
       source:  function (query, process) {
       return $.get(path, { query: query }, function (data) {
@@ -309,7 +309,7 @@
 
 <script>
 
-    var path = "{{ route('autocomplete-maestros') }}";
+    var path = "{{ url('autocomplete-maestros') }}";
     $('#input-{{$input_id}}').typeahead({
         source:  function (query, process) {
         return $.get(path, { query: query }, function (data) {
