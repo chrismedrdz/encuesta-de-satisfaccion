@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
+
 class AutocompleteController extends Controller
 {
     public function autocomplete_basic(Request $request)
@@ -20,6 +22,8 @@ class AutocompleteController extends Controller
     public function autocomplete_maestros(Request $request)
     {
         //$data = Item::select("title as name")->where("title","LIKE","%{$request->input('query')}%")->get();
+
+        return response()->json(User::all());
 
         $data_array = array();
         $data_array[] = array('value' => 'Pedro Salazar Villa', 'description' => 'Ciencias');

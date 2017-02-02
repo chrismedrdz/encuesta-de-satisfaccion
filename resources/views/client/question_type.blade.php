@@ -268,7 +268,7 @@
 <script>
 
   var path = "{{ url('autocomplete-basic') }}";
-  $('#input-'{{$input_id}}).typeahead({
+  $('#input-{{$input_id}}').typeahead({
       source:  function (query, process) {
       return $.get(path, { query: query }, function (data) {
           return process(data);
@@ -315,6 +315,14 @@
         return $.get(path, { query: query }, function (data) {
             return process(data);
           });
+        }
+    });
+    /*
+    $('#input-{{--$input_id--}}').typeahead({
+        source:  function (query, process) {
+        return $.get(path, { query: query }, function (data) {
+            return process(data);
+          });
         },
         displayText: function (item) {
             return item.value + " &ndash; " + item.description;
@@ -337,12 +345,13 @@
             return jElem.html();
         },
         afterSelect: function( item ){
-            $('#inputs-{{$input_id}}').val( item.value );
-            $('#inputs-{{$input_id}}').attr( 'readonly' , 'readonly');
+            $('#inputs-{{--$input_id--}}').val( item.value );
+            $('#inputs-{{--$input_id--}}').attr( 'readonly' , 'readonly');
 
-            $('#labelClear_q{{$input_id}}').removeClass('hidden');
+            $('#labelClear_q{{--$input_id--}}').removeClass('hidden');
         }
     });
+    */
 
     @if( $question['required'] === 1)
         globalSection{{$s}}.push({
