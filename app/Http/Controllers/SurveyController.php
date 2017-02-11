@@ -39,6 +39,8 @@ class SurveyController extends Controller {
             $sector_nombre=$request->input('alumno_colegio');
             $sector_id = Self::getSectorID($sector_nombre);
             $school_id = Self::getSchoolID($sector_nombre);
+            
+            if($srv->id <= 9){
 
             $user= new UserSurvey;
             $user->student_name=$request->input('alumno_nombre');
@@ -48,7 +50,17 @@ class SurveyController extends Controller {
             $user->school_id=$school_id;
             $user->sector_id=$sector_id;
             $user->survey_id=$survey_id;
-            
+            }
+            else{
+            $user= new UserSurvey;
+            $user->name=$request->input('alumno_nombre');
+            $user->lastname1=$request->input('alumno_apaterno');
+            $user->lastname2=$request->input('alumno_amaterno');
+
+            $user->school_id=$school_id;
+            $user->sector_id=$sector_id;
+            $user->survey_id=$survey_id;
+            }
             //validación de llenado correcto de infomación a base de datos
             if($user->save()){
                 $lastInsertedId= $user->id; //get last inserted record's user id value
