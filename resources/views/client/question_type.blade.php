@@ -56,7 +56,15 @@
   $key= (string)$key;
 @endphp
 
-{!! Form::text('question['.$key.']', '0' ,['id' => 'input-'.$input_id, 'class' => 'rating' ]) !!}
+
+
+@if(isset($question_group->id))
+  <input type="hidden" name="{{$question_group->id}}">
+  {!! Form::text('question[g_'.str_replace('group_','', $question_id).'q_'.$key.']', '0' ,['id' => 'input-'.$input_id, 'class' => 'rating' ]) !!}
+@else
+  {!! Form::text('question['.$key.']', '0' ,['id' => 'input-'.$input_id, 'class' => 'rating' ]) !!}
+@endif
+
 
 @if( $question->type['na_active'] === 1)
   <label style="display: inline; font-weight:bold; color: #C02942;">

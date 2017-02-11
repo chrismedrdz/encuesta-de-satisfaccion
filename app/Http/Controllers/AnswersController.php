@@ -21,17 +21,40 @@ class AnswersController extends Controller {
         $comments=$request->input('comment');
         $survey_id=$request->input('survey_id');
 
+        //dd($request);
+
     	//itero el arrray de question $clave como is de pregunta y $valor como resultado
         $i=0;
 		foreach($questions as $clave  => $valor){
 
 
             if ($valor != '0') {
+                
+                if($clave===205){
+                    $sportId=$valor;
+                }
+
+                if( strpos($clave, 'g_') !== false ){    
+                    
+                    //echo "grupo";
+                    $answer= new Answer;
+                    $answer->user_id=$request->input('user_id');
+                    $answer->section_id=$request->input('section_id');
+                    $current_section = $answer->section_id;
+                    $answer->survey_id=$request->input('survey_id');
+                    $answer->question_id=trim(self::obtenerCadena($clave.'.','q_','.'));
+                    $answer->group_id=trim(self::obtenerCadena($clave,'g_','q'));
+                    $answer->result=$valor;
+                    $answer->sports_id=$sportId;
+
+
+                } else {
+
                     if($clave>=74 && $clave<=97){
-                            if($clave===74){
-                                $teacher=$valor;
-                                $TeacherId=self::getTeacherId($teacher);
-                            }
+                        if($clave===74){
+                            $teacher=$valor;
+                            $TeacherId=self::getTeacherId($teacher);
+                        }
 
                         $answer= new Answer;
                         $answer->user_id=$request->input('user_id');
@@ -44,16 +67,21 @@ class AnswersController extends Controller {
                         $answer->teacher=$TeacherId;
 
                     }else{
-                $answer= new Answer;
-                $answer->user_id=$request->input('user_id');
-                $answer->section_id=$request->input('section_id');
-                $current_section = $answer->section_id;
-                $answer->survey_id=$request->input('survey_id');
+                        $answer= new Answer;
+                        $answer->user_id=$request->input('user_id');
+                        $answer->section_id=$request->input('section_id');
+                        $current_section = $answer->section_id;
+                        $answer->survey_id=$request->input('survey_id');
 
-                $answer->question_id=$clave;
-                $answer->result=$valor;
+                        $answer->question_id=$clave;
+                        $answer->result=$valor;
                 
+                    }
+
                 }
+                    
+
+
                 //validación de llenado correcto de infomación a base de datos
                 if($answer->save()){
                     continue;
@@ -100,8 +128,18 @@ class AnswersController extends Controller {
 		$request->session()->put('current_section', $current_section);
 		return back();
 
+
     }
 
+
+    protected function obtenerCadena($contenido,$inicio,$fin) {
+          $r = explode($inicio, $contenido);
+          if (isset($r[1])){
+              $r = explode($fin, $r[1]);
+              return $r[0];
+          }
+          return '';
+    }
     //Obtener el id del teacher.
     protected function getTeacherID($name){
             $id=Teacher::where('name', $name)->value('id');
