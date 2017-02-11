@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\User;
 use App\Teacher;
+use DB;
 
 class AutocompleteController extends Controller
 {
@@ -22,13 +23,13 @@ class AutocompleteController extends Controller
 
     public function autocomplete_maestros(Request $request)
     {
-        //$data = Item::select("title as name")->where("title","LIKE","%{$request->input('query')}%")->get();
+        $data = Teacher::select("name as name")->where("name","LIKE","%{$request->input('query')}%")->get();
 
-        return response()->json(Teacher::all());
+        $user_srv_id = session('usuario_id');
 
-       /* $data_array = array();
-        $data_array[] = array('value' => 'Pedro Salazar Villa', 'description' => 'Ciencias');
-        $data_array[] = array('value' => 'Americo Sotelo Peña', 'description' => 'Computación');
-        return response()->json($data_array);*/
+        $data = DB::select("select * from teachers where name LIKE '%{$request->input('query')}%' collate utf8_general_ci");
+
+        //dd();
+        return response()->json( $data );
     }
 }

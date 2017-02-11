@@ -195,8 +195,8 @@ h1{ margin-top: 0px;}
 <script type="text/javascript">
 
       function habilitarTypehead(question_id) {
-        $('#inputs-'+question_id).val('');
-        $('#inputs-'+question_id).removeAttr('readonly');
+        $('#input-'+question_id).val('');
+        $('#input-'+question_id).removeAttr('readonly');
 
         $('#labelClear_q'+question_id).addClass('hidden');
       }

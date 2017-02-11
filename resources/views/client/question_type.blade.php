@@ -297,6 +297,8 @@
   {!! Form::text('question['.$key. ']]', '' ,['id' => 'input-'.$input_id, 'class' => 'typeahead sm-form-control', 'style' => 'width:50%;display: inline;' ]) !!}
 @endif
 
+<input type="hidden" id="teacher_id" value=""/>
+
 <label style="display: inline;" class="hidden" id="labelClear_q{{$input_id}}">
   <i class="icon-minus-sign" style="cursor: pointer;" onclick="habilitarTypehead({{$input_id}});"></i>
 </label>
@@ -310,11 +312,54 @@
 <script>
 
     var path = "{{ url('autocomplete-maestros') }}";
+    var dat = [];
+    var objects = [];
+    var map = {};
+
+    function saveVar(d) {
+      dat=d;
+    }
+    
     $('#input-{{$input_id}}').typeahead({
         source:  function (query, process) {
-        return $.get(path, { query: query }, function (data) {
-            return process(data);
+
+          //return $.get(path, { query: query }, function (data) {
+              
+              //d = data;
+              /*
+              $.each(data, function(i, object) {
+                  map[object.name] = object;
+                  objects.push(object.name);
+              });
+              */
+              //return process(objects);
+          // });
+
+          $.ajax({
+              type:"GET",
+              url: path,
+              data:"query="+query ,
+              success: function(data){
+                  saveVar(data);
+              }
           });
+
+         // d = $.get(path, { query: query }, function (data) { return data; });
+
+          d=dat;
+              for (var i = 0; i < dat.length; i++) {
+                  map[d[i]['name']] = d[i]['id'];
+                  objects.push(d[i]['name']);
+                  //console.log(d[i]['name']);
+              }
+
+              return process(objects);
+        },
+        updater: function(item) {
+            $('#teacher_id').val(map[item].id);
+            $('#labelClear_q{{$input_id}}').removeClass('hidden');
+            $('#input-{{$input_id}}').attr('readonly','readonly');
+            return item;
         }
     });
     /*
