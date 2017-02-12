@@ -72,6 +72,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 	<!-- Document Title
 	============================================= -->
 	<title>Encuesta Institucional CECAC 2017</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
 </head>
 <body class="stretched">
 
