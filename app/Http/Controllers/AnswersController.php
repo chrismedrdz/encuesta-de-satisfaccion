@@ -21,22 +21,42 @@ class AnswersController extends Controller {
         $comments=$request->input('comment');
         $survey_id=$request->input('survey_id');
 
-        //dd($request);
-
     	//itero el arrray de question $clave como is de pregunta y $valor como resultado
         $i=0;
+
+        $aux=[];
 		foreach($questions as $clave  => $valor){
 
+            if ($valor != '0' && $valor != '' ) {
+                /*
+                if ($i==0) {
+                    if( strpos($clave, 'g_') !== false )
+                        $aux[]=trim(self::obtenerCadena($clave,'g_','q'));
+                    else 
+                        $aux[] = 'xD';
+                } else {
+                    if( strpos($clave, 'g_') !== false )
+                        $aux[]=trim(self::obtenerCadena($clave,'g_','q'));
+                    else 
+                        $aux[] = 'xD';
 
-            if ($valor != '0') {
-                
-                if($clave===205){
-                    $sportId=$valor;
-                }
 
-                if( strpos($clave, 'g_') !== false ){    
-                    
-                    //echo "grupo";
+                    if ($aux[$i] == $aux[$i-1]) {
+                        # continue
+                        $answer->group_id=trim(self::obtenerCadena($clave,'g_','q'));
+                    }
+                }*/
+
+                if( strpos($clave, 'g_') !== false ) {
+
+                    if ( self::obtenerCadena($clave,'g_','q') == '9') {
+                        $sportId=null;
+                    } else {
+                        if( trim(self::obtenerCadena($clave.'.','q_','.')) == '205' ){
+                            $sportId=$valor;
+                        }
+                    }
+
                     $answer= new Answer;
                     $answer->user_id=$request->input('user_id');
                     $answer->section_id=$request->input('section_id');
@@ -44,9 +64,18 @@ class AnswersController extends Controller {
                     $answer->survey_id=$request->input('survey_id');
                     $answer->question_id=trim(self::obtenerCadena($clave.'.','q_','.'));
                     $answer->group_id=trim(self::obtenerCadena($clave,'g_','q'));
-                    $answer->result=$valor;
-                    $answer->sports_id=$sportId;
+                    
 
+                    if ( is_array($valor) ) {
+                        $answer->result=implode(',', $valor);
+                    } else {
+                        $answer->result=$valor;
+                    }
+                    
+                    if(!empty($sportId)){
+                        $answer->sports_id=$sportId;
+                    }
+                    else{$answer->sports_id=null;}
 
                 } else {
 
@@ -77,10 +106,7 @@ class AnswersController extends Controller {
                         $answer->result=$valor;
                 
                     }
-
-                }
-                    
-
+                }                
 
                 //validación de llenado correcto de infomación a base de datos
                 if($answer->save()){
@@ -98,14 +124,10 @@ class AnswersController extends Controller {
             $comment->users_id=$request->input('user_id');
             $comment->sections_id=$request->input('section_id');
             $comment->surveys_id=$request->input('survey_id');
-
-            if(!empty($TeacherId)){
+            if(!empty($TeacherId))
                 $comment->teachers_id= $TeacherId;
-            }
-                
-            $comment->comment=$request->input('comment');
-            
 
+            $comment->comment=$request->input('comment');
             if( $comment->save() ){
                 
             } else {

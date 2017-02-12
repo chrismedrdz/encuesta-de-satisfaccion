@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\DB;
 use  App\User;
 use  App\Survey;
 use  App\GroupQuestions;
+use  App\Sport;
 use Session;
 
 class HomeController extends Controller {

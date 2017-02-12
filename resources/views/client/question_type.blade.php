@@ -6,8 +6,6 @@
   @php $input_id = $question_id; @endphp
 @endif
 
-
-
 @if( $question['question_type'] === 1)
 {{--3 estrellas --}}
  @php
@@ -56,19 +54,22 @@
   $key= (string)$key;
 @endphp
 
-
-
-@if(isset($question_group->id))
-  <input type="hidden" name="{{$question_group->id}}">
+@if ( strpos($question_id, 'group') !== false  ) {{-- Es un grupo de preguntas --}}
   {!! Form::text('question[g_'.str_replace('group_','', $question_id).'q_'.$key.']', '0' ,['id' => 'input-'.$input_id, 'class' => 'rating' ]) !!}
 @else
   {!! Form::text('question['.$key.']', '0' ,['id' => 'input-'.$input_id, 'class' => 'rating' ]) !!}
 @endif
 
-
 @if( $question->type['na_active'] === 1)
   <label style="display: inline; font-weight:bold; color: #C02942;">
-    <input type="checkbox" onclick="setNA(this,'{{$input_id}}');" id="na_q{{$input_id}}" name="question[{{$key}}]]" value="1111"> No Aplica 
+
+    @if ( strpos($question_id, 'group') !== false  ) {{-- Es un grupo de preguntas --}}
+      <input type="checkbox" onclick="setNA(this,'{{$input_id}}');" id="na_q{{$input_id}}" name="question[g_{{str_replace('group_','', $question_id)}}q_{{$key}}]" value="1111"> 
+    @else
+      <input type="checkbox" onclick="setNA(this,'{{$input_id}}');" id="na_q{{$input_id}}" name="question[{{$key}}]]" value="1111"> 
+    @endif
+
+    No Aplica 
   </label>
 @endif
 
@@ -113,7 +114,11 @@
  
 @endphp
 
-{!! Form::text('question['.$key.']', '0' ,['id' => 'input-'.$input_id, 'class' => 'rating' ]) !!}
+@if ( strpos($question_id, 'group') !== false  ) {{-- Es un grupo de preguntas --}}
+  {!! Form::text('question[g_'.str_replace('group_','', $question_id).'q_'.$key.']', '0' ,['id' => 'input-'.$input_id, 'class' => 'rating' ]) !!}
+@else
+  {!! Form::text('question['.$key.']', '0' ,['id' => 'input-'.$input_id, 'class' => 'rating' ]) !!}
+@endif
 
 @if( $question->type['na_active'] === 1)
   <label style="display: inline; font-weight:bold; color: #C02942;">
@@ -129,7 +134,6 @@
   $("#input-{{$input_id}}").rating({
     min:0, max:10, stars:10, step:1, size:'xs', showClear:false, clearCaption:'', showCaption:false
   }).on("rating.change", function(event, value, caption) {
-    //alert(value);
     $('#input-{{$input_id}}').val(value);
   });
 
@@ -145,18 +149,31 @@
 @elseif( $question['question_type'] === 4)
 {{--select unique --}}
 @php
-  $questions_str = ','.$question->options;
-  $options_question = explode(',', $questions_str);
+  if ($question->options != 'sports') {
+    $questions_str = ','.$question->options;
+    $options_question = explode(',', $questions_str);
+  } else {
+    $options_question = \App\Sport::all()->prepend('','')->pluck('name', 'id')->toArray();
+  }
   $key=$question->id;
   $keys= array($key);                  
 
 @endphp
 
-@if( $question['init_hidden'] === 1)
-  {!! Form::select('question['.$key.']]', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select hidden', 'style' => 'width:auto; display: inline;'] ) !!}
-@else 
+@if ( strpos($question_id, 'group') !== false  ) {{-- Es un grupo de preguntas --}}
+  {!! Form::select('question[g_'.str_replace('group_','', $question_id).'q_'.$key.']', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select', 'style' => 'width:auto; display: inline;'] ) !!}
+@else
   {!! Form::select('question['.$key.']]', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select', 'style' => 'width:auto; display: inline;'] ) !!}
 @endif
+
+@if( $question['disable_on_change'] === 1)
+  <script> $('#input-{{$input_id}}').attr('onchange','deshabilitarSelect(this)');</script>
+@endif
+
+@if( $question['init_hidden'] === 1)
+  <script> $('#input-{{$input_id}}').addClass('hidden');</script>
+@endif
+
 
 @if( $question['required'] === 1)
   <span id="labelRequired_q{{$input_id}}" class="label label-danger hidden">Requerido</span>
@@ -174,19 +191,27 @@
 @elseif( $question['question_type'] === 9)
 {{--select multiple --}}
 @php
-  $questions_str = ','.$question->options;
-  $options_question = explode(',', $questions_str);
+
+  if ($question->options != 'sports') {
+    $options_question = explode(',', $question->options);
+  } else {
+    $options_question = \App\Sport::all()->pluck('name', 'id')->toArray();
+  }
+ 
   $key=$question->id;
   $keys= array($key);                  
 
 @endphp
 
-@if( $question['init_hidden'] === 1)
-  {!! Form::select('question['.$key. ']]', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select select2 hidden', 'multiple' => 'multiple', 'style' => 'width:auto; display: inline;'] ) !!}
-@else 
-  {!! Form::select('question['.$key. ']]', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select select2', 'multiple' => 'multiple', 'style' => 'width:auto; display: inline;'] ) !!}
+@if(isset($question_group->id))
+  {!! Form::select('question[g_'.str_replace('group_','', $question_id).'q_'.$key.'][]', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select select2','multiple' => 'multiple', 'style' => 'width:auto; display: inline;'] ) !!}
+@else
+  {!! Form::select('question['.$key.']]', $options_question, null, ['id' => 'input-'.$input_id, 'class' => 'form-control chosen-select select2', 'multiple' => 'multiple', 'style' => 'width:auto; display: inline;'] ) !!}
 @endif
 
+@if( $question['init_hidden'] === 1)
+  <script> $('#input-{{$input_id}}').addClass('hidden');</script>
+@endif
 
 @if( $question['required'] === 1)
   <span id="labelRequired_q{{$input_id}}" class="label label-danger hidden">Requerido</span>
@@ -209,10 +234,14 @@
  
 @endphp
 
-@if( $question['init_hidden'] === 1)
-  {!! Form::text('question['.$key.']]', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control hidden', 'style' => 'width:50%;' ]) !!}
-@else 
+@if ( strpos($question_id, 'group') !== false  ) {{-- Es un grupo de preguntas --}}
+  {!! Form::text('question[g_'.str_replace('group_','', $question_id).'q_'.$key.']', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control', 'style' => 'width:50%;' ]) !!}
+@else
   {!! Form::text('question['.$key.']]', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control', 'style' => 'width:50%;' ]) !!}
+@endif
+
+@if( $question['init_hidden'] === 1)
+  <script> $('#input-{{$input_id}}').addClass('hidden');</script>
 @endif
 
 @if( $question['required'] === 1)
@@ -235,10 +264,14 @@
   $key= (string)$key;
 @endphp
 
-@if( $question['init_hidden'] === 1)
-  {!! Form::textarea('question['.$key. ']]', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control hidden', 'rows' => '4' , 'style' => 'resize:none;' ]) !!}
-@else 
+@if ( strpos($question_id, 'group') !== false  ) {{-- Es un grupo de preguntas --}}
+  {!! Form::textarea('question[g_'.str_replace('group_','', $question_id).'q_'.$key.']', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control', 'rows' => '4' , 'style' => 'resize:none;' ]) !!}
+@else
   {!! Form::textarea('question['.$key. ']]', '' ,['id' => 'input-'.$input_id, 'class' => 'form-control', 'rows' => '4' , 'style' => 'resize:none;' ]) !!}
+@endif
+
+@if( $question['init_hidden'] === 1)
+  <script> $('#input-{{$input_id}}').addClass('hidden');</script>
 @endif
 
 @if( $question['required'] === 1)
@@ -417,7 +450,6 @@
 
 @elseif( $question['question_type'] === 10)
 {{--Texto plano (nada que hacer) --}}
-
 
 @elseif( $question['question_type'] === 11)
 {{--checkbox multiple --}}

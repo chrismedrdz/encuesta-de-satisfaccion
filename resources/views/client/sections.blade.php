@@ -4,6 +4,7 @@
 .control-label {display: block;}
 .rating-disabled .rating { opacity: 0.5; }
 .typeahead { width:50%; }
+.mtlbl {margin-top: 10px;}
 h1{ margin-top: 0px;}
 </style>
 <div class="tab-container">
@@ -16,7 +17,6 @@ h1{ margin-top: 0px;}
     @php
     $section=\App\Section::find($sec);
     @endphp
-
 
     <script type="text/javascript">
         /* Global Variable for section validate*/
@@ -59,13 +59,16 @@ h1{ margin-top: 0px;}
             {{-- Es un grupo de preguntas --}}
               @php
               $grupo=\App\GroupQuestions::find(str_replace('group_','', $question_id));
-              //dd($grupo->questions);
               @endphp
 
               <div class="panel panel-primary hidden" id="grupo_{{$grupo->id}}">
                   @if($grupo->panel_title != null)
                     <div class="panel-heading">
-                      <h3 class="panel-title">{{$grupo->panel_title}}</h3>
+                      <h3 class="panel-title">{{$grupo->panel_title}}
+                      <label style="display: inline;float: right;" id="labelClear_g{{$grupo->id}}">
+                        <i class="icon-minus-sign" style="cursor: pointer; color:white;" onclick="borrarGrupo({{$grupo->id}});"></i>
+                      </label>
+                      </h3>
                     </div>
                   @endif
 
@@ -77,7 +80,7 @@ h1{ margin-top: 0px;}
                       $question=\App\Question::find($question_group->id);
                       @endphp
 
-                      {!! Form::label('', $j.' - '. $question['description'], ['class' => 'control-label']) !!}
+                      {!! Form::label('', $question['description'], ['class' => 'control-label mtlbl']) !!}
                       
                       @include('client.question_type')
 
@@ -93,10 +96,14 @@ h1{ margin-top: 0px;}
               $question=\App\Question::find($question_id);
               @endphp
 
-              @if( $question['init_hidden'] === 1)
-                {!! Form::label('', $i.' - '. $question['description'], ['class' => 'control-label hidden']) !!}  
-              @else 
-                {!! Form::label('', $i.' - '. $question['description'], ['class' => 'control-label']) !!}
+              @if( $question['question_type'] === 10)
+                {!! Form::label('', $question['description'], ['class' => 'control-label mtlbl text-primary']) !!}
+              @else
+                  @if( $question['init_hidden'] === 1)
+                    {!! Form::label('', $question['description'], ['class' => 'control-label hidden mtlbl']) !!}  
+                  @else 
+                    {!! Form::label('', $question['description'], ['class' => 'control-label mtlbl']) !!}
+                  @endif
               @endif
               
               @include('client.question_type')
@@ -194,6 +201,8 @@ h1{ margin-top: 0px;}
 
 <script type="text/javascript">
 
+var id_select;
+
       function habilitarTypehead(question_id) {
         $('#input-'+question_id).val('');
         $('#input-'+question_id).removeAttr('readonly');
@@ -201,6 +210,17 @@ h1{ margin-top: 0px;}
         $('#labelClear_q'+question_id).addClass('hidden');
       }
 
+      function borrarGrupo(group_id) {
+        $('#grupo_'+group_id).addClass('hidden');
+        $('#'+id_select).val('');
+        $('#'+id_select).removeAttr('disabled');
+      }
+
+      function deshabilitarSelect(obj) {
+        var id = obj.id;
+        id_select = id;
+        $('#'+id).attr('disabled','disabled');
+      }
 
       function validateForm(section) {
         

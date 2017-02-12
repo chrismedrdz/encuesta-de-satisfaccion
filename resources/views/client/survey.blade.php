@@ -26,6 +26,7 @@
   }
 
   $percent_completed=( $section_active/$total_sections )*100;
+  //$section_active = 3;
 @endphp
 
 @foreach ($sections as $section)
