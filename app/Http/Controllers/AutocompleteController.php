@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\User;
+use App\UserSurvey;
 use App\Teacher;
 use DB;
+use Session;
 
 class AutocompleteController extends Controller
 {
@@ -23,13 +25,26 @@ class AutocompleteController extends Controller
 
     public function autocomplete_maestros(Request $request)
     {
-        $data = Teacher::select("name as name")->where("name","LIKE","%{$request->input('query')}%")->get();
+        $school=self::getSchoolId();
+        $data = Teacher::select("name as name")->where([
+            ['schools_id','=', $school],
+            ["name","LIKE","%{$request->input('query')}%"],
+            ])->get();
 
-        $user_srv_id = session('usuario_id');
+        
+        
 
-        $data = DB::select("select * from teachers where name LIKE '%{$request->input('query')}%' collate utf8_general_ci");
+       // $data = DB::select("select * from teachers where [schools_id = 1],[name LIKE '%{$request->input('query')}%'],");
 
-        //dd();
         return response()->json( $data );
     }
+
+    //obtenemos el valor de la escuela del usuario que esta en ssesion
+    protected function getSchoolId(){
+        $user_srv_id = session('usuario_id');
+        $id=UserSurvey::where('id', $user_srv_id)->value('school_id');
+        return $id;
+
+    }
+    
 }
