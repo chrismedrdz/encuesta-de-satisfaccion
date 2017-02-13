@@ -34,15 +34,18 @@ Route::group(['middleware' => 'survey'], function () {
     'as'  =>  'userPost'
   ]);
   
-  Route::get('survey/{id}',[
-    'uses'  =>  'SurveyController@index',
-    'as'  =>  'surveyView'
-  ]);
+  
+    Route::get('survey/{id}',[
+      'uses'  =>  'SurveyController@index',
+      'as'  =>  'surveyView',
+      'middleware' => 'checkSurvey'
+    ]);
 
-  Route::post('survey/{id}/postanswers',[
-    'uses'  =>  'AnswersController@postAnswers',
-    'as'  =>  'answerPost'
-  ]);
+    Route::post('survey/{id}/postanswers',[
+      'uses'  =>  'AnswersController@postAnswers',
+      'as'  =>  'answerPost'
+    ]);
+
 
   Route::get('autocomplete-basic',array('as'=>'autocomplete-basic','uses'=>'AutoCompleteController@autocomplete_basic'));
 
