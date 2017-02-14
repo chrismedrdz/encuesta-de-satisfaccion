@@ -15,19 +15,33 @@ p{margin-bottom: 0px;}
 	<div class="content-wrap">
 
 		<div class="container clearfix" id="contenido_principal">	
-
+@if($survey->id < 10)
 			<div class="title-block">
 				<h2>Estimado <span>Alumno</span>:</h2>
 				<span>La información que nos proporciones es muy valiosa para nosotros, ya que nos permitirá continuar y mejorar el servicio en nuestra institución.</span>
 				<p>Te recordamos que tu evaluación es totalmente <b>CONFIDENCIAL</b> por lo que es fundamental contestes de la manera más precisa posible para asegurar un muy exitoso proceso de retroalimentación.</p>
 			</div>
 
+@else
+
+<div class="title-block">
+				<h2>Estimado <span>Padre de familia</span>:</h2>
+				<span>El objetivo del Centro Escolar Cuauhtémoc, A.C. es conseguir un alto nivel de calidad en el servicio educativo que otorgamos.<BR>La información que nos proporcione es muy valiosa para nosotros, ya que nos permitirá continuar y mejorar el servicio en nuestra institución.</span>
+				<p>Le recordamos que tu evaluación es totalmente <b>CONFIDENCIAL</b> por lo que es fundamental contestes de la manera más precisa posible para asegurar un muy exitoso proceso de retroalimentación.</p>
+			</div>
+
+
+@endif
 			<div class="col_full topmargin center">	
 
 				{!! Form::open(['id' => 'form_user', 'name' => 'form_user', 'onsubmit' => 'return false', 'method' => 'POST',  'url' => url()->current().'/postSurveyUser' ] ) !!}
 
 							{!! Form::hidden('survey_id', $survey->id ) !!}
+							@if($survey->id < 10)
 							<h3>Datos del Alumno</h3>
+							@else
+							<h3>Datos del Evaluador</h3>
+							@endif
 							<div class="col_one_fourth">
 								<label for="alumno_nombre">Nombre:</label>
 								<input type="text" id="alumno_nombre" name="alumno_nombre" value="" class="form-control not-dark text-center" required="required" >

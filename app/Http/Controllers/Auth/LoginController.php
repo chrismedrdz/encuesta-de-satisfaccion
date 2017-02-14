@@ -65,9 +65,10 @@ class LoginController extends Controller
             'code' => 'required'
         ], $messages);
 
-
+        //eliminar erros de espacios al ingresar el codigo
         $code= $request->only('code');
-        $id=Self::getId($code);
+        $code=implode(",",$code);
+        $id=Self::getId(trim($code));
 
         if (Auth::guard('client')->loginUsingId($id, true) ) {
             // Authentication passed...

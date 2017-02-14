@@ -26,6 +26,7 @@ class AutocompleteController extends Controller
     public function autocomplete_maestros(Request $request)
     {
         $school=self::getSchoolId();
+       
         /*$data = Teacher::select("name as name")->where([
             ['schools_id','=', $school],
             ["name","LIKE","%{$request->input('query')}%"],
