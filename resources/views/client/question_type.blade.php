@@ -362,6 +362,7 @@
     }
     
     $('#input-{{$input_id}}').typeahead({
+      items: 1,
         source:  function (query, process) {
 
           //return $.get(path, { query: query }, function (data) {
@@ -379,7 +380,7 @@
           $.ajax({
               type:"GET",
               url: path,
-              data:"query="+query ,
+              data:"query="+query,
               success: function(data){
                   saveVar(data);
               }
