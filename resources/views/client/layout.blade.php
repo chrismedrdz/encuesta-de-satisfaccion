@@ -37,7 +37,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 	<link href="{{ asset('css/select2-bootstrap.css') }}" rel="stylesheet" />
 	
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+	<script src="{{ asset('js/bootstrap3-typeahead.min.js') }}"></script>
 
 
 	<!-- Vuejs script file -->
@@ -72,7 +72,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 	<!-- Document Title
 	============================================= -->
 	<title>Encuesta Institucional CECAC 2017</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" href="{{ asset('img/favicon.png') }}">
 </head>
 <body class="stretched">
 
@@ -91,9 +91,9 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
 					<!-- Logo
 					============================================= -->
 					<div id="logo" class="center">
-						<a href="/template/" class="standard-logo" data-dark-logo="img/logo2.png"><img alt="logo" src="{{ url('/img/logo2.png') }}"></a>
+						<a href="{{ url('/') }}" class="standard-logo" data-dark-logo="img/logo2.png"><img alt="logo" src="{{ url('/img/logo2.png') }}"></a>
 
-						<a href="/template/" class="retina-logo" data-dark-logo="img/logo2.png"><img alt="logo" src="{{ url('/img/logo2.png') }}"></a>
+						<a href="{{ url('/') }}" class="retina-logo" data-dark-logo="img/logo2.png"><img alt="logo" src="{{ url('/img/logo2.png') }}"></a>
 					</div>
 
 					<div class="logocecac center" >

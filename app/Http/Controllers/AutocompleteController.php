@@ -35,9 +35,10 @@ class AutocompleteController extends Controller
             */
 
          //$data = Teacher::select("name as name")->where("name","LIKE","%{$request->input('query')}%")->get();
-        
+        //$school=1;
+        $query = "select * from teachers where schools_id= '{$school}' AND name LIKE '%{$request->input('query')}%' COLLATE utf8_general_ci";
 
-       $data = DB::select("select * from teachers where schools_id= '{$school}' AND name LIKE '%{$request->input('query')}%'");
+       $data = DB::select($query);
 
         return response()->json( $data );
     }

@@ -356,26 +356,31 @@
     var dat = [];
     var objects = [];
     var map = {};
+    var normalized;¡
 
     function saveVar(d) {
       dat=d;
+    }
+
+    function normalize(str) {
+
+       // Quitamos acentos
+       str = str.replace(/á/gi,"a");
+       str = str.replace(/é/gi,"e");
+       str = str.replace(/í/gi,"i");
+       str = str.replace(/ó/gi,"o");
+       str = str.replace(/ú/gi,"u");
+       str = str.replace(/Á/gi,"A");
+       str = str.replace(/É/gi,"E");
+       str = str.replace(/Í/gi,"I");
+       str = str.replace(/Ó/gi,"O");
+       str = str.replace(/Ú/gi,"U");
+       return str;
     }
     
     $('#input-{{$input_id}}').typeahead({
       items: 1,
         source:  function (query, process) {
-
-          //return $.get(path, { query: query }, function (data) {
-              
-              //d = data;
-              /*
-              $.each(data, function(i, object) {
-                  map[object.name] = object;
-                  objects.push(object.name);
-              });
-              */
-              //return process(objects);
-          // });
 
           $.ajax({
               type:"GET",
@@ -386,16 +391,16 @@
               }
           });
 
-         // d = $.get(path, { query: query }, function (data) { return data; });
+          for (var i = 0; i < dat.length; i++) {
 
-          d=dat;
-              for (var i = 0; i < dat.length; i++) {
-                  map[d[i]['name']] = d[i]['id'];
-                  objects.push(d[i]['name']);
-                  //console.log(d[i]['name']);
-              }
+              normalized = normalize(dat[i]['name']);
+              //console.log(normalized);
+              map[normalized] = dat[i]['id'];
+              objects.push(normalized);
+              //console.log(dat[i]['name']);
+          }
 
-              return process(objects);
+        return process(objects);
         },
         updater: function(item) {
             $('#teacher_id').val(map[item].id);
