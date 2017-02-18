@@ -356,7 +356,7 @@
     var dat = [];
     var objects = [];
     var map = {};
-    var normalized;¡
+    var normalized;
 
     function saveVar(d) {
       dat=d;
