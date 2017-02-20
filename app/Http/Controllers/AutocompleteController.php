@@ -10,7 +10,7 @@ use App\Teacher;
 use DB;
 use Session;
 
-class AutocompleteController extends Controller
+class AutoCompleteController extends Controller
 {
     public function autocomplete_basic(Request $request)
     {
