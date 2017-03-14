@@ -13,6 +13,7 @@ use Auth;
 use Session;
 
 use App\Survey;
+use App\UserSurvey;
 
 class LoginController extends Controller
 {
@@ -89,9 +90,27 @@ class LoginController extends Controller
     }
 
     public function logout() {
-
+        $url=url()->full();
+        $id= Self::obtenerCadena($url,'out/','e');
+        $user=UserSurvey::where('id', '=', $id)->first();
+          
+        $user->survey_answered = 1;
+        $user->save();
+       
+       
         Auth::guard('client')->logout();
+        
         Session::flush();
         return redirect()->intended('/login');
+    }
+
+
+        protected function obtenerCadena($contenido,$inicio,$fin) {
+          $r = explode($inicio, $contenido);
+          if (isset($r[1])){
+              $r = explode($fin, $r[1]);
+              return $r[0];
+          }
+          return '';
     }
 }

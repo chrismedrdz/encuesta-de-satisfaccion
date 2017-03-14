@@ -28,7 +28,7 @@
   $percent_completed=( $section_active/$total_sections )*100;
   //$section_active = 3;
 @endphp
-
+<input type="hidden" name="user_survey" value="<?php echo $usuario_id ?>"> 
 @foreach ($sections as $section)
 
 @endforeach

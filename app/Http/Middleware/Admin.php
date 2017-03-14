@@ -17,10 +17,11 @@ class Admin
     public function handle($request, Closure $next)
     {
          
-        if ( $this->auth->user()->rols_id != '1')
+
+        /*if ( $this->auth->user()->rols_id != '1')
         {
            
-                return redirect('logout');
+                return view('admin.index');
 
             if ($request->ajax()) {
                 return response('no autorizado');
@@ -36,8 +37,15 @@ class Admin
             
     
 
-    return $next($request);
+    return $next($request);*/
 
+    if ($this->auth->user()) {
+            return $next($request);
+        } else {
+            return redirect('admin/acces');
+        }
+
+        return $next($request);
 }
 
 }

@@ -5,5 +5,5 @@
 
 <div class="col_full nobottommargin center">
 
-	<a class="button button-3d button-red nomargin" id="login-form-logout" name="login-form-logout" type="button"  href="{{ url('/logout') }}">Salir</a>
+	<a class="button button-3d button-red nomargin" id="login-form-logout" name="login-form-logout" type="button"  href="{{ url('/logout', [$usuario_id . 'e']) }}">Salir</a>
 </div>

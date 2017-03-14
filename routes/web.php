@@ -12,17 +12,20 @@
 */
 
 // Authentication routes...
-Route::get('/',   'Auth\LoginController@showLoginForm');
+//Route::get('/',   'Auth\LoginController@showLoginForm');
 Route::get('login',   'Auth\LoginController@showLoginForm');
 Route::post('login1',  'Auth\LoginController@authenticateClients');
-Route::get('logout',  'Auth\LoginController@logout');
+Route::get('logout/{id}',  'Auth\LoginController@logout');
+Route::get('logoutAdmin',  'Auth\LoginAdminController@getLogoutAdmin');
+Route::get('admin/acces',  'Auth\LoginAdminController@index');
+Route::Post('admin/loginAdmin',  'Auth\LoginAdminController@postLoginAdmin');
 
 //CLIENTS
 
 Route::group(['middleware' => 'survey'], function () {
 
-  Route::get('/',                         'HomeController@index');
-  Route::get('/home',                       'HomeController@index');
+  Route::get('/', 'HomeController@index');
+  Route::get('/home', 'HomeController@index');
 
   Route::post('/home/postSurveyUser',[
     'uses'  =>  'SurveyController@postSurveyUser',
@@ -51,7 +54,13 @@ Route::group(['middleware' => 'survey'], function () {
 
   Route::get('autocomplete-maestros', 'AutoCompleteController@autocomplete_maestros');
   
+});
 
+//admin
+Route::group(['prefix' => 'admin','middleware' => 'admin'], function(){
+
+Route::get('/', 'HomeAdminController@home');
+Route::get('home', 'HomeAdminController@home');
 
 });
 

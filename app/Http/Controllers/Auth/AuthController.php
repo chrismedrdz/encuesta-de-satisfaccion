@@ -8,7 +8,7 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -39,14 +39,14 @@ class AuthController extends Controller
      *
      * @return void
      */
-    /*
-    public function __construct(Guard $auth)
+    
+   /* public function __construct(Guard $auth)
     {
         //$this->auth = $auth;
-        $this->middleware('survey', ['except' => 'getLogout']);
+        $this->middleware('admin', ['except' => 'getLogout']);
       
-    }
-    */
+    }*/
+    
 
     /**
      * Get a validator for an incoming registration request.
@@ -54,7 +54,42 @@ class AuthController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-   
+ public function getLoginAdmin(){
+    return view('admin.index');
+}
+
+public function postLoginAdmin(Request $request){
+
+
+        $messages = [
+            'email.required'        => ' El email de acceso es requerido.',
+            'password.required'        => ' La contraseña es requerida.',
+        ];
+
+        $this->validate($request, [
+            'email' => 'required',
+            'password' => 'required'
+        ], $messages);
+
+        
+$credentials = $request->only('email', 'password');
+
+    if ($this->auth->attempt($credentials, $request->has('remember'))){
+                return redirect('admin/home');
+
+        } else {
+
+            $loginFailed = [
+                'loginFailed' => 'el correo o contraseña son incorrectos',
+            ];
+            return redirect()->back()->withInput()->withErrors($loginFailed);
+            
+        }
+
+    return true;
+}
+
+
 /*
 
 //login2
@@ -139,5 +174,19 @@ class AuthController extends Controller
         return redirect('/');
     }
 
+    public function getLoginAdmin(){
+        return view('admin.index');
+    }
+
+    public function getLogoutAdmin() {
+
+    return "hola"; 
+
+       // $this->auth->logout();
+
+       //  Session::flush();
+
+       //  return redirect('admin/loginAdmin');
+    }
 
 }
